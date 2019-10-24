@@ -7,7 +7,7 @@ using namespace std;
 void truncateTester(); /**<Tests the Truncate Class*/
 
 int main(){
-  cout << "Hello World";
+  cout << "Hello World"; //hacked
   //new stuff
 
   truncateTester();
