@@ -1,1 +1,1 @@
-# CSci-331-Goup-6
+# CSci-331-Group-6
