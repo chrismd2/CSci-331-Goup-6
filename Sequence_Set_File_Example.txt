@@ -1,0 +1,20 @@
+US Postal Codes
+Fields: 6
+Field Name  |   column range    |   type 
+Zip Code|1-6|u_integer
+Place Name|7-37|text
+State|38-39|text
+County|40-75|text
+Latitude|76-84|float
+Longitude|85-94|float
+123456123456123456123456
+   501   544  1001  1002
+  1003  1004  1005  1007
+  1008  1009  1010  1011
+ 	    .
+ 	    .
+ 	    .
+ 	    .
+ 	    .
+ 	    .
+ 99927 99928 99929 99950
