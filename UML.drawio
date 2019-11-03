@@ -1,6 +1,6 @@
-<mxfile host="www.draw.io" modified="2019-11-03T17:44:39.424Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36" etag="gZmJStVfPU_7utQ9y8tV" version="12.1.9" type="github" pages="1">
+<mxfile host="www.draw.io" modified="2019-11-03T17:47:44.900Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36" etag="yKPPwBBQgVCeJmrwPYR9" version="12.1.9" type="github" pages="1">
   <diagram id="Ys3HZVprmhT14fWjxTii" name="Page-1">
-    <mxGraphModel dx="487" dy="341" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1408" dy="748" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
@@ -57,33 +57,6 @@
         </mxCell>
         <mxCell id="Z5_UFI_bqKNKYEiBKsY_-49" value="+ float: get_latitude()&#xa;+ float: get_longitude()&#xa;+ float: getDistance(Grid)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Z5_UFI_bqKNKYEiBKsY_-46" vertex="1">
           <mxGeometry y="68" width="160" height="52" as="geometry"/>
-        </mxCell>
-        <mxCell id="Z5_UFI_bqKNKYEiBKsY_-50" value="class: LinkedList" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-          <mxGeometry x="120" y="800" width="180" height="240" as="geometry"/>
-        </mxCell>
-        <mxCell id="Z5_UFI_bqKNKYEiBKsY_-51" value="headerPtr: Pointer to First Node&#xa;itemCount: int&#xa;getNodeAt: prt to Node&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Z5_UFI_bqKNKYEiBKsY_-50" vertex="1">
-          <mxGeometry y="26" width="180" height="54" as="geometry"/>
-        </mxCell>
-        <mxCell id="Z5_UFI_bqKNKYEiBKsY_-52" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="Z5_UFI_bqKNKYEiBKsY_-50" vertex="1">
-          <mxGeometry y="80" width="180" height="18" as="geometry"/>
-        </mxCell>
-        <mxCell id="Z5_UFI_bqKNKYEiBKsY_-53" value="LinkedList()&#xa;~LinkedList()&#xa;isEmpty()&#xa;getLength()&#xa;insert()&#xa;remove()&#xa;clear()&#xa;getEntry()&#xa;replace()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Z5_UFI_bqKNKYEiBKsY_-50" vertex="1">
-          <mxGeometry y="98" width="180" height="142" as="geometry"/>
-        </mxCell>
-        <mxCell id="Z5_UFI_bqKNKYEiBKsY_-54" value="Class: Node" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-          <mxGeometry x="410" y="810" width="160" height="150" as="geometry"/>
-        </mxCell>
-        <mxCell id="Z5_UFI_bqKNKYEiBKsY_-55" value="item: ItemType&#xa;nodeptr: Next Node" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Z5_UFI_bqKNKYEiBKsY_-54" vertex="1">
-          <mxGeometry y="26" width="160" height="34" as="geometry"/>
-        </mxCell>
-        <mxCell id="Z5_UFI_bqKNKYEiBKsY_-56" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="Z5_UFI_bqKNKYEiBKsY_-54" vertex="1">
-          <mxGeometry y="60" width="160" height="8" as="geometry"/>
-        </mxCell>
-        <mxCell id="Z5_UFI_bqKNKYEiBKsY_-57" value="Node()&#xa;setItem()&#xa;setNext()&#xa;getItem()&#xa;getNext()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="Z5_UFI_bqKNKYEiBKsY_-54" vertex="1">
-          <mxGeometry y="68" width="160" height="82" as="geometry"/>
-        </mxCell>
-        <mxCell id="Z5_UFI_bqKNKYEiBKsY_-60" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=-0.017;entryY=0.142;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="Z5_UFI_bqKNKYEiBKsY_-51" target="Z5_UFI_bqKNKYEiBKsY_-54" edge="1">
-          <mxGeometry relative="1" as="geometry"/>
         </mxCell>
         <mxCell id="Z5_UFI_bqKNKYEiBKsY_-61" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="Z5_UFI_bqKNKYEiBKsY_-36" target="Z5_UFI_bqKNKYEiBKsY_-45" edge="1">
           <mxGeometry relative="1" as="geometry"/>
