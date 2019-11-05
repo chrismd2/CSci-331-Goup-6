@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <string>
+#include "grid.cpp"
 using namespace std;
 
 class Record
@@ -24,8 +25,8 @@ class Record
     Record(string _zip_code, string _place_name, string _state, string _county, Grid _gridPoint);
     Record(string _zip_code, string _place_name, string _state, string _county, string latitude, string longitude);
     void display();
-    void display(string field); //This might benefit from calling get_field
-    string get_field(string field); //This should have a switch statement
+    void display(string); //This might benefit from calling get_field
+    string get_field(string); //This should have a switch statement
     /**/
     string get_zip_code();
     string get_place_name();
@@ -34,7 +35,14 @@ class Record
     /**/
     float get_latitude();
     float get_longitude();
-
+    Grid get_grid_point();
+    /**/
+    void set_zip_code(string);
+    void set_place_name(string);
+    void set_state(string);
+    void set_county(string);
+    void set_longitude_latitude(float, float);
+    void set_grid_point(Grid);
 
     // Data Members 
     private:

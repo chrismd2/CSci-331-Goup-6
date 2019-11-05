@@ -4,17 +4,22 @@
 
 Record::Record()
 {
-  isEmpty;
-  zip_code;
-  place_name;
-  state;
-  county;
-  gridPoint;
+  isEmpty = 1;
+  zip_code = "";
+  place_name = "";
+  state = "";
+  county = "";
+  gridPoint = Grid();
 }
 
 void Record::display()
 {
-  //test commit
+    cout << "Zipcode: " << get_zip_code()
+       << " Place: " << get_place_name()
+       << " State: " << get_state()
+       << " County: " << get_county()
+       << " Longitude: " << get_longitude()
+       << " Latitude: " << get_latitude();
 }
 
 void Record::display(string field)
@@ -67,10 +72,47 @@ string Record::get_county()
 
 float Record::get_latitude()
 {
-  return gridPoint.get_latitude();
+  return gridPoint.getLatitude();
 }
 
 float Record::get_longitude()
 {
-  return gridPoint.get_longitude();
+  return gridPoint.getLongitude();
+}
+
+Grid Record::get_grid_point()
+{
+  return gridPoint;
+}
+
+void Record::set_zip_code(string _zip_code)
+{
+  zip_code = _zip_code;
+}
+
+void Record::set_place_name(string _place_name)
+{
+  place_name = _place_name;
+}
+
+void Record::set_state(string _state)
+{
+  state = _state;
+}
+
+void Record::set_county(string _county)
+{
+  county = _county;
+}
+
+void Record::set_longitude_latitude(float longitude, float latitude)
+{
+  gridPoint.setLatitude( latitude );
+  gridPoint.setLongitude( longitude );
+}
+
+void Record::set_grid_point(Grid _gridPoint)
+{
+  gridPoint.setLatitude( _gridPoint.getLatitude() );
+  gridPoint.setLongitude ( _gridPoint.getLongitude() );
 }
