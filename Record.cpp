@@ -4,12 +4,32 @@
 
 Record::Record()
 {
-  isEmpty = 1;
   zip_code = "";
   place_name = "";
   state = "";
   county = "";
-  gridPoint = Grid();
+  this -> set_longitude_latitude( 0.0, 0.0 );
+}
+
+Record::Record(string _zip_code, string _place_name, string _state, string _county, Grid _gridPoint)
+{
+  zip_code = _zip_code;
+  place_name = _place_name;
+  state = _state;
+  county = _county;
+  this -> set_grid_point( _gridPoint );
+}
+
+Record::Record(string _zip_code, string _place_name, string _state, string _county, string longitude, string latitude)
+{
+  float lon = string_to_float( longitude );
+  float lat = string_to_float( latitude );
+
+  zip_code = _zip_code;
+  place_name = _place_name;
+  state = _state;
+  county = _county;
+  this -> set_longitude_latitude( lon, lat );
 }
 
 void Record::display()
@@ -21,7 +41,7 @@ void Record::display()
        << " Longitude: " << get_longitude()
        << " Latitude: " << get_latitude();
 }
-
+/*
 void Record::display(string field)
 {
   for(int i = 0; field[i] != NULL; i++){
@@ -49,7 +69,7 @@ void Record::display(string field)
       break;
   }
 }
-
+*/
 string Record::get_zip_code()
 {
   return zip_code;
@@ -115,4 +135,12 @@ void Record::set_grid_point(Grid _gridPoint)
 {
   gridPoint.setLatitude( _gridPoint.getLatitude() );
   gridPoint.setLongitude ( _gridPoint.getLongitude() );
+}
+
+float Record::string_to_float(string str)
+{
+  size_t size;
+  float float_value = stof( str, &size );
+
+  return float_value;
 }

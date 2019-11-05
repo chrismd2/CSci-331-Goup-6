@@ -22,8 +22,8 @@ class Record
     // Access specifier 
     public: 
     Record();
-    Record(string _zip_code, string _place_name, string _state, string _county, Grid _gridPoint);
-    Record(string _zip_code, string _place_name, string _state, string _county, string latitude, string longitude);
+    Record(string, string, string, string, Grid);
+    Record(string, string, string, string, string, string);
     void display();
     void display(string); //This might benefit from calling get_field
     string get_field(string); //This should have a switch statement
@@ -52,5 +52,7 @@ class Record
     string state;
     string county;
     Grid gridPoint;
-  
+    /**/
+    //helper functions
+    float string_to_float(string);
 }; 
