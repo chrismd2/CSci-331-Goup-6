@@ -11,7 +11,7 @@ int main()
 {
   //test default constructor
 	Record testRecord;
-  cout << "Default constructor Record:";
+  cout << "Default constructor record:";
   testRecord.display();
 
   //test fill record
@@ -30,7 +30,25 @@ int main()
 
   cout << "Filled Record:";
   testRecord.display();
+
+  //test constructor 2
+  string longitude_string = "74.25";
+  string latitude_string = "79.72";
+
+  Record testRecord2(zip, place, state, county, longitude_string, latitude_string);
+
+  cout << "Constructor2 record (long/lat are strings):";
+  testRecord2.display();
 	
-	 
+	//test constructor 3
+  Grid grid_test(longitude, latitude);
+
+  Record testRecord3(zip, place, state, county, grid_test);
+
+  cout << "Constructor3 record (long/lat are gridPoint):";
+  testRecord3.display();
+
+  
+
 	return 0;
 }
