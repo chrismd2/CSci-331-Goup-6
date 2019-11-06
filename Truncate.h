@@ -14,11 +14,11 @@ public:
          Preconditions:   Input must be an int
          Postconditions:  A truncate object will be created with a size of the input for max length*/
     Truncate(int);
-    /**  Default constructor
+    /**  String modifier
          Preconditions:   Input must be a string
          Postconditions:  The truncate object will truncate the input string and return it*/
     string modifyString(string&);
-    /**  Default constructor
+    /**  Temporary string modifier
          Preconditions:   Input must be a string
          Postconditions:  The truncate object will copy the input string and return the truncated string
                             without modifying the original*/
