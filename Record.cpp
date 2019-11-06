@@ -34,12 +34,14 @@ Record::Record(string _zip_code, string _place_name, string _state, string _coun
 
 void Record::display()
 {
-    cout << "Zipcode: " << get_zip_code()
+    cout << endl
+       << "Zipcode: " << get_zip_code()
        << " Place: " << get_place_name()
        << " State: " << get_state()
        << " County: " << get_county()
        << " Longitude: " << get_longitude()
-       << " Latitude: " << get_latitude();
+       << " Latitude: " << get_latitude()
+       << endl;
 }
 /*
 void Record::display(string field)
@@ -136,6 +138,8 @@ void Record::set_grid_point(Grid _gridPoint)
   gridPoint.setLatitude( _gridPoint.getLatitude() );
   gridPoint.setLongitude ( _gridPoint.getLongitude() );
 }
+
+//helper functions
 
 float Record::string_to_float(string str)
 {
