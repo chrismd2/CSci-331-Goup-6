@@ -20,7 +20,7 @@ Record::Record(string _zip_code, string _place_name, string _state, string _coun
   this -> set_grid_point( _gridPoint );
 }
 
-Record::Record(string _zip_code, string _place_name, string _state, string _county, string longitude, string latitude)
+Record::Record(string _zip_code, string _place_name, string _state, string _county, string latitude, string longitude)
 {
   float lon = string_to_float( longitude );
   float lat = string_to_float( latitude );
