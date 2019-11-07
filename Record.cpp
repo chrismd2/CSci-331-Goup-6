@@ -1,6 +1,9 @@
 //file Record.h
 
 #include "Record.h"
+#include <stdio.h>
+#include <stdlib.h>
+using namespace std;
 
 Record::Record()
 {
@@ -35,12 +38,12 @@ Record::Record(string _zip_code, string _place_name, string _state, string _coun
 void Record::display()
 {
     cout << endl
-       << "Zipcode: " << get_zip_code()
-       << " Place: " << get_place_name()
-       << " State: " << get_state()
-       << " County: " << get_county()
-       << " Longitude: " << get_longitude()
-       << " Latitude: " << get_latitude()
+       << "Zipcode: " << get_field("Zipcode")
+       << " Place: " << get_field("Place")
+       << " State: " << get_field("State")
+       << " County: " << get_field("County")
+       << " Longitude: " << get_field("Longitude")
+       << " Latitude: " << get_field("Latitude")
        << endl;
 }
 
@@ -84,14 +87,14 @@ string Record::get_field(string field)
   else if(field=="COUNTY")
     returnString = county;
   else if(field=="G" || field=="GRID")
-    returnString = gridPoint.getLatitude() + " " + gridPoint.getLongitude();
+    returnString = itoa(gridPoint.getLatitude()) + " " + itoa(gridPoint.getLongitude());
   else if(field == "LAT" || field == "LATITUDE")
-    returnString = gridPoint.getLatitude();
+    returnString = itoa(gridPoint.getLatitude());
   else if(field == "LONG" || field == "LONGITUDE")
-    returnString = gridPoint.getLongitude();
+    returnString = itoa(gridPoint.getLongitude());
   else
     returnString = "ERROR" + endl;
-  
+
   return returnString;
 }
 
@@ -103,7 +106,7 @@ void Record::set_field(string field, string data)
   for(int i = 0; data[i] != NULL; i++){
       data[i] = toupper(data[i]);
   }
-  
+
   //The following if else-if statements replace the case statement variation
   if(field=="Z" || field=="ZIP")
     zip_code = data;
