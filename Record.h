@@ -48,25 +48,13 @@ class Record
     /**  Specified get_field function
          Preconditions:   Provided string must match the name of a field in the record
          Postconditions:  Record object will return the specified field from its own data*/
-    /**/
-    string get_zip_code();
-    string get_place_name();
-    string get_state();
-    string get_county();
-    /**/
-    float get_latitude();
-    float get_longitude();
-    Grid get_grid_point();
+    
     /**  Specified set function
          Preconditions: First provided string must match the name of a field in the record
                         Second provided string must be the appropriate length for the field
          Postconditions:  Record object will display the specified field from its own data*/
     string set_field(string, string);
-    /**/
-    void set_zip_code(string);
-    void set_place_name(string);
-    void set_state(string);
-    void set_county(string);
+
     void set_longitude_latitude(float, float);
     void set_grid_point(Grid);
 
