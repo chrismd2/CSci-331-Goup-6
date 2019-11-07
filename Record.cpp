@@ -63,28 +63,29 @@ void Record::display(string field)
   else
     cout << "Invalid field has been entered." << endl;
 
-  /*
-  switch(field){
-    case Z:
-    case ZIP:
-      cout << zip_code << endl;
-      break;
-    case CITY:
-    case P:
-    case PLACE_NAME:
-      cout << place_name << endl;
-      break;
-    case STATE:
-      cout << state << endl;
-      break;
-    case COUNTY:
-      cout << county << endl;
-      break;
-    case G:
-    case GRID:
-      cout << gridPoint.getLatitude() << " " << gridPoint.getLongitude() << endl;
-      break;
-  }
+  
+  // switch(field)
+  //{
+  //   case Z:
+  //   case ZIP:
+  //     cout << zip_code << endl;
+  //     break;
+  //   case CITY:
+  //   case P:
+  //   case PLACE_NAME:
+  //     cout << place_name << endl;
+  //     break;
+  //   case STATE:
+  //     cout << state << endl;
+  //     break;
+  //   case COUNTY:
+  //     cout << county << endl;
+  //     break;
+  //   case G:
+  //   case GRID:
+  //     cout << gridPoint.getLatitude() << " " << gridPoint.getLongitude() << endl;
+  //     break;
+  //}
   
 }
 
