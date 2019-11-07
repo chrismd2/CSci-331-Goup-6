@@ -21,12 +21,33 @@ class Record
 { 
     // Access specifier 
     public: 
-    Record();
+    /**  Default constructor
+         Preconditions:   None
+         Postconditions:  A blank record object is created*/
+    Record(); 
+    /**  Constructor with a grid object
+         Preconditions:   Grid object is provided
+         Postconditions:  A filled record object is created with a grid object*/
     Record(string, string, string, string, Grid);
+    /**  Constructor with a grid as lat/long
+         Preconditions:   Grid is provided in the order latitude, longitude
+         Postconditions:  A filled record object is created with a grid object*/
     Record(string, string, string, string, string, string);
+    /**  Empty display function
+         Preconditions:   None
+         Postconditions:  Record object will display all of its own data*/
     void display();
+    /**  Empty display function
+         Preconditions:   None
+         Postconditions:  Record object will display all of its own data*/
     void display(string); //This might benefit from calling get_field
+    /**  Specified display function
+         Preconditions:   Provided string must match the name of a field in the record
+         Postconditions:  Record object will display the specified field from its own data*/
     string get_field(string); //This should have a switch statement
+    /**  Specified get_field function
+         Preconditions:   Provided string must match the name of a field in the record
+         Postconditions:  Record object will return the specified field from its own data*/
     /**/
     string get_zip_code();
     string get_place_name();
@@ -36,6 +57,11 @@ class Record
     float get_latitude();
     float get_longitude();
     Grid get_grid_point();
+    /**  Specified set function
+         Preconditions: First provided string must match the name of a field in the record
+                        Second provided string must be the appropriate length for the field
+         Postconditions:  Record object will display the specified field from its own data*/
+    string set_field(string, string);
     /**/
     void set_zip_code(string);
     void set_place_name(string);
@@ -52,22 +78,6 @@ class Record
     string state;
     string county;
     Grid gridPoint;
-    /**/
     //helper functions
     float string_to_float(string);
-
-    /*
-    enum Field
-    {
-        Z,
-        ZIP,
-        CITY,
-        P,
-        PLACE_NAME,
-        STATE,
-        COUNTY,
-        G,
-        GRID
-    }
-    */
 }; 
