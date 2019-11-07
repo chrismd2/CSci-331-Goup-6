@@ -49,6 +49,19 @@ void Record::display(string field)
   for(int i = 0; field[i] != NULL; i++){
       field[i] = toupper(field[i]);
   }
+  //The following if else-if statements replace the case statement variation
+  if(field=="Z" || field=="ZIP")
+    cout << zip_code << endl;
+  else if(field=="CITY" || field=="P" || field=="PLACE_NAME")
+    cout << place_name << endl;
+  else if(field=="STATE")
+    cout << state << endl;
+  else if(field=="COUNTY")
+    cout << county << endl;
+  else if(field=="G" || field=="GRID")
+    cout << gridPoint.getLatitude() << " " << gridPoint.getLongitude() << endl;
+  else
+    cout << "Invalid field has been entered." << endl;
 
   /*
   switch(field){
@@ -72,7 +85,7 @@ void Record::display(string field)
       cout << gridPoint.getLatitude() << " " << gridPoint.getLongitude() << endl;
       break;
   }
-  */
+  
 }
 
 string Record::get_zip_code()
