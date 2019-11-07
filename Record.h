@@ -55,4 +55,19 @@ class Record
     /**/
     //helper functions
     float string_to_float(string);
+
+    /*
+    enum Field
+    {
+        Z,
+        ZIP,
+        CITY,
+        P,
+        PLACE_NAME,
+        STATE,
+        COUNTY,
+        G,
+        GRID
+    }
+    */
 }; 

@@ -43,35 +43,38 @@ void Record::display()
        << " Latitude: " << get_latitude()
        << endl;
 }
-/*
+
 void Record::display(string field)
 {
   for(int i = 0; field[i] != NULL; i++){
       field[i] = toupper(field[i]);
   }
+
+  /*
   switch(field){
-    case "Z":
-    case "ZIP":
+    case Z:
+    case ZIP:
       cout << zip_code << endl;
       break;
-    case "CITY":
-    case "P":
-    case "PLACE_NAME":
+    case CITY:
+    case P:
+    case PLACE_NAME:
       cout << place_name << endl;
       break;
-    case "STATE":
+    case STATE:
       cout << state << endl;
       break;
-    case "COUNTY":
+    case COUNTY:
       cout << county << endl;
       break;
-    case "G":
-    case "GRID":
-      cout << gridPoint.getLatitude << " " << gridPoint.getLongitude << endl;
+    case G:
+    case GRID:
+      cout << gridPoint.getLatitude() << " " << gridPoint.getLongitude() << endl;
       break;
   }
+  */
 }
-*/
+
 string Record::get_zip_code()
 {
   return zip_code;

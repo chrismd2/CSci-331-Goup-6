@@ -6,6 +6,18 @@
 
 using namespace std;
 
+enum Field
+{
+    Z,
+    ZIP,
+    CITY,
+    P,
+    PLACE_NAME,
+    STATE,
+    COUNTY,
+    G,
+    GRID
+};
 
 int main()
 {
@@ -48,7 +60,12 @@ int main()
   cout << "Constructor3 record (long/lat are gridPoint):";
   testRecord3.display();
 
-  
+  cout << endl << "check enum:";
+  testRecord3.display(CITY);
+  cout << "~expected: Little Falls" << endl;
+
+  testRecord3.display(STATE);
+  cout << "~expected: Minnesota" << endl;
 
 	return 0;
 }
