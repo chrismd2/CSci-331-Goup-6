@@ -2,12 +2,16 @@
 @file
 @author Christenson, Mark
 */
+const bool DEBUG = false;
 
 #include "Truncate.h"
 #include <string>
 
 Truncate::Truncate(){
-    maxLength = maxLength;
+    if (DEBUG)
+    {
+        cout << "Truncate object made";
+    }
 }
 Truncate::Truncate(int _size){
     maxLength = _size;
