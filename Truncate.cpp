@@ -9,7 +9,7 @@
 Truncate::Truncate(){
     maxLength = maxLength;
 }
-Truncate::Truncate(int _size = 6){
+Truncate::Truncate(int _size){
     maxLength = _size;
 }
 

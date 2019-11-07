@@ -1,0 +1,4 @@
+recordSize+headerSize
+2*recordSize+headerSize
+7*recordSize+headerSize
+numRecords*recordSize+headerSize

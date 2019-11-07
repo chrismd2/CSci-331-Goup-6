@@ -1,0 +1,28 @@
+Sequence Set File
+
+Fields: 11
+Field Name  |   column range    |   type 
+RBN|1-6|u_integer
+prvblk|7-12|integer
+key1|13-18|integer
+k1offset|19-28|integer
+key2|29-34|integer
+k2offset|35-44|integer
+key3|45-50|integer
+k3offset|51-60|integer
+key4|61-66|integer
+k4offset|67-76|integer
+nxtblk|77-82|integer
+   RBNprvblk  key1  k1offset  key2  k2offset  key3  k3offset  key4  k1offsetnxtblk
+12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+     1 hdptr   501        11   544        12  1001        13  1002        14     2
+     2     1  1003        15  1004        16  1005        17  1007        18     3
+     3     2  1008        19  1009        20  1010        21  1011        22     4
+ 	    .
+ 	    .
+ 	    .
+ 	    .
+ 	    .
+ 	    .
+ 10233 10232 99926     40939 99927     40940 99928     40941 99929     40942 10234
+ 10234 10233 99950     40940                                     	      null
