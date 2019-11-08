@@ -1,7 +1,8 @@
+
 #include <iostream>
 #include "Truncate.h"
 #include "Record.h"
-#include "Header.cpp"
+//#include "Header.cpp"
 #include <string>
 
 using namespace std;
@@ -10,7 +11,9 @@ void truncateTester(); /**<Tests the Truncate Class*/
 
 int main(){
   cout << "Hello World"; //Hacked
-  //new stuff
+  if (DEBUG){
+    cout << "Debug comment\n";
+}
 
   truncateTester();
 }
