@@ -1,10 +1,25 @@
-//file Record.h
+/**---------------------------------------------------------------------------
+// @Record.cpp
+// Class Record (Contains information about individual zipcodes)
+// @author Tyler Lahr and Ryan Sweeney  (Additional comments by Mark Christenson)
+//---------------------------------------------------------------------------
+// Record class:  Used by Sequence Set Class
+//   includes additional features:
+//   -- Display the whole record it represents
+//   -- Display a field with in the record
+//   -- Return a field as a string
+//   -- Return the latitude
+//   -- Return the longitude
+//---------------------------------------------------------------------------**/
 
 #include "Record.h"
 #include <stdio.h>
 #include <stdlib.h>
 using namespace std;
 
+/**  Default constructor
+     Preconditions:   None
+     Postconditions:  A blank record object is created*/
 Record::Record()
 {
   zip_code = "";
@@ -14,6 +29,9 @@ Record::Record()
   this -> set_longitude_latitude( 0.0, 0.0 );
 }
 
+/**  Constructor with a grid object
+     Preconditions:   Grid object is provided
+     Postconditions:  A filled record object is created with a grid object*/
 Record::Record(string _zip_code, string _place_name, string _state, string _county, Grid _gridPoint)
 {
   zip_code = _zip_code;
@@ -23,6 +41,9 @@ Record::Record(string _zip_code, string _place_name, string _state, string _coun
   this -> set_grid_point( _gridPoint );
 }
 
+/**  Constructor with a grid as lat/long
+     Preconditions:   Grid is provided in the order latitude, longitude
+     Postconditions:  A filled record object is created with a grid object*/
 Record::Record(string _zip_code, string _place_name, string _state, string _county, string latitude, string longitude)
 {
   float lon = string_to_float( longitude );
@@ -35,6 +56,9 @@ Record::Record(string _zip_code, string _place_name, string _state, string _coun
   this -> set_longitude_latitude( lon, lat );
 }
 
+/**  Empty display function
+     Preconditions:   None
+     Postconditions:  Record object will display all of its own data*/
 void Record::display()
 {
     cout << endl
@@ -47,6 +71,9 @@ void Record::display()
        << endl;
 }
 
+/**  Empty display function
+     Preconditions:   None
+     Postconditions:  Record object will display all of its own data*/
 void Record::display(string field)
 {
   for(int i = 0; field[i] != NULL; i++){
@@ -71,6 +98,9 @@ void Record::display(string field)
     cout << "Invalid field has been entered." << endl;
 }
 
+/**  Specified display function
+     Preconditions:   Provided string must match the name of a field in the record
+     Postconditions:  Record object will display the specified field from its own data*/
 string Record::get_field(string field)
 {
   string returnString;
@@ -98,6 +128,14 @@ string Record::get_field(string field)
   return returnString;
 }
 
+/**  Specified get_field function
+     Preconditions:   Provided string must match the name of a field in the record
+     Postconditions:  Record object will return the specified field from its own data*/
+
+/**  Specified set function
+     Preconditions: First provided string must match the name of a field in the record
+                    Second provided string must be the appropriate length for the field
+     Postconditions:  Record object will display the specified field from its own data*/
 void Record::set_field(string field, string data)
 {
   for(int i = 0; field[i] != NULL; i++){
