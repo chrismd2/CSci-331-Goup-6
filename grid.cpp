@@ -12,7 +12,7 @@
 
 #include <iostream>
 #include <math.h>
-const bool DEBUG = true;
+//const bool DEBUG = true;
 
 using namespace std;
 	

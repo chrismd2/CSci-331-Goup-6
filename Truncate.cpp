@@ -2,13 +2,13 @@
 @file
 @author Christenson, Mark
 */
-const bool DEBUG = false;
 
-#include "Truncate.h"
+//#include "Truncate.h"
 #include <string>
+#include "Header.cpp"
 
 Truncate::Truncate(){
-    if (DEBUG)
+    if (true)
     {
         cout << "Truncate object made";
     }

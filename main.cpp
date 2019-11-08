@@ -1,5 +1,7 @@
 #include <iostream>
 #include "Truncate.h"
+#include "Record.h"
+#include "Header.cpp"
 #include <string>
 
 using namespace std;
