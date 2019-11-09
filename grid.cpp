@@ -52,7 +52,7 @@ Grid::Grid(){
 }
 
 /** Constructor requiring both latitude and longitude
- *  @pre Values for latitude and longitude
+ *  @pre Values for latitude and longitude as float
  *  @post Sets values for latitude and longitude
  */
 Grid::Grid(float _latitude, float _longitude){
