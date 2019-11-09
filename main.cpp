@@ -9,7 +9,7 @@ void truncateTester(); /**<Tests the Truncate Class*/
 void recordTester();
 
 int main(){
-  cout << "Hello World"; //Hacked
+  cout << "Hello World\n"; //Hacked
   //new stuff
 
   truncateTester();
@@ -24,10 +24,10 @@ void truncateTester(){
   cout << endl << "The String is " << str;
   cout << endl << "The String AS it is modified is " << t.modifyString(str);
   cout << endl << "The String IF it was modified is " << t2.truncatedString(str);
-  cout << endl << "The String is " << str;
+  cout << endl << "The String is " << str << endl;
 }
 
-int recordTester(){
+void recordTester(){
   //test default constructor
 	Record testRecord;
   cout << "Default constructor record (should be empty):";

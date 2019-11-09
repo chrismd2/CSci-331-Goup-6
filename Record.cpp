@@ -42,6 +42,7 @@ Record::Record()
   state = "";
   county = "";
   this -> set_longitude_latitude( 0.0, 0.0 );
+  if(DEBUG) {cout << "Made an empty record.\n";}
 }
 
 /** Constructor with a grid object
@@ -55,6 +56,7 @@ Record::Record(string _zip_code, string _place_name, string _state, string _coun
   state = _state;
   county = _county;
   this -> set_grid_point( _gridPoint );
+  if(DEBUG) {cout << "Made a filled record using a gridPoint.\n";}
 }
 
 /** Constructor that also takes latitude, and longitude
@@ -71,6 +73,7 @@ Record::Record(string _zip_code, string _place_name, string _state, string _coun
   state = _state;
   county = _county;
   this -> set_longitude_latitude( lon, lat );
+  if(DEBUG) {cout << "Made a filled record using string lat/longs.\n";}
 }
 
 /** Displays all fields of the record
@@ -79,6 +82,7 @@ Record::Record(string _zip_code, string _place_name, string _state, string _coun
  */
 void Record::display()
 {
+    if(DEBUG) {cout << "Displaying the whole record from the record.\n";}
     cout << endl
        << "Zipcode: " << get_field("Zipcode")
        << " Place: " << get_field("Place")
@@ -95,6 +99,7 @@ void Record::display()
  */
 void Record::display(string field)
 {
+  if(DEBUG) {cout << "Displaying the "<< field <<" portion of the record.\n";}
   for(int i = 0; field[i] != NULL; i++){
       field[i] = toupper(field[i]);
   }
@@ -123,6 +128,7 @@ void Record::display(string field)
  */
 string Record::get_field(string field)
 {
+  if(DEBUG) {cout << "Retrieving the "<< field <<" portion of the record.\n";}
   string returnString;
   for(int i = 0; field[i] != NULL; i++){
       field[i] = toupper(field[i]);
@@ -137,13 +143,13 @@ string Record::get_field(string field)
   else if(field=="COUNTY")
     returnString = county;
   else if(field=="G" || field=="GRID")
-    returnString = itoa(gridPoint.getLatitude()) + " " + itoa(gridPoint.getLongitude());
+    returnString = to_string(gridPoint.getLatitude()) + " " + to_string(gridPoint.getLongitude());
   else if(field == "LAT" || field == "LATITUDE")
-    returnString = itoa(gridPoint.getLatitude());
+    returnString = to_string(gridPoint.getLatitude());
   else if(field == "LONG" || field == "LONGITUDE")
-    returnString = itoa(gridPoint.getLongitude());
+    returnString = to_string(gridPoint.getLongitude());
   else
-    returnString = "ERROR" + endl;
+    returnString = "ERROR";
 
   return returnString;
 }
@@ -155,6 +161,7 @@ string Record::get_field(string field)
  */
 void Record::set_field(string field, string data)
 {
+  if(DEBUG) {cout << "Setting the "<< field <<" portion of the record from "<< get_field(field) << " to"<< data <<".\n";}
   for(int i = 0; field[i] != NULL; i++){
       field[i] = toupper(field[i]);
   }

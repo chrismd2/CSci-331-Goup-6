@@ -12,6 +12,9 @@
 //   -- Return the longitude
 //---------------------------------------------------------------------------**/
 
+#ifndef RECORD_H
+#define RECORD_H
+
 #include <iostream>
 #include <string>
 #include "grid.cpp"
@@ -53,7 +56,7 @@ class Record
          Preconditions: First provided string must match the name of a field in the record
                         Second provided string must be the appropriate length for the field
          Postconditions:  Record object will display the specified field from its own data*/
-    string set_field(string, string);
+    void set_field(string, string);
 
     void set_longitude_latitude(float, float);
     void set_grid_point(Grid);
@@ -69,3 +72,7 @@ class Record
     //helper functions
     float string_to_float(string);
 }; 
+
+#include "Record.cpp"
+
+#endif

@@ -11,7 +11,8 @@
  *   -- Return distance to a provided grid from this grid
  *---------------------------------------------------------------------------
  */
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <iostream>
 #include <math.h>
 using namespace std;
@@ -36,6 +37,8 @@ class Grid {
   	Grid(float, float);
   	void setLatitude(float);
   	void setLongitude(float);
+  	void setLatitude(string);
+  	void setLongitude(string);
   	float getLatitude();
 		float getLongitude();
 		float getDistance(Grid);
@@ -67,12 +70,28 @@ void Grid::setLatitude(float _latitude){
 	latitude = _latitude;
 }
 
+/** Sets Latitude for this grid object
+ *  @pre _latitude must follow rules regarding string to float
+ *  @post Sets latitude for grid object
+ */
+void Grid::setLatitude(string _latitude){
+	setLatitude(stof(_latitude));
+}
+
 /** Sets Longitude for this grid object
  *  @pre _longitude must follow rules regarding floats
  *  @post Sets longitude for grid object
  */
 void Grid::setLongitude(float _longitude){
 	longitude = _longitude;  
+}
+
+/** Sets Longitude for this grid object
+ *  @pre _longitude must follow rules regarding string to float
+ *  @post Sets longitude for grid object
+ */
+void Grid::setLongitude(string _longitude){
+	setLatitude(stof(_longitude));  
 }
 
 /**  Gets Latitude for this grid object
