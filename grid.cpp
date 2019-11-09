@@ -14,9 +14,8 @@
 
 #include <iostream>
 #include <math.h>
-//const bool DEBUG = true;
-
 using namespace std;
+//const bool DEBUG = true;
 	
 /** Grid class
  *  
