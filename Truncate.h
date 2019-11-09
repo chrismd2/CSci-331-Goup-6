@@ -27,4 +27,6 @@ private:
     int maxLength = 10;
 };
 
+#include "Truncate.cpp"
+
 #endif
