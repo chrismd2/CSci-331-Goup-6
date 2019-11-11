@@ -1,19 +1,36 @@
 #include <iostream>
 #include "Truncate.h"
 #include "Record.h"
+#include "Block.h"
 #include <string>
+#include <fstream>
 
 using namespace std;
 
 void truncateTester(); /**<Tests the Truncate Class*/
 void recordTester();
+void blockTester();
 
 int main(){
   cout << "Hello World\n"; //Hacked
   //new stuff
+  
+  blockTester();
+}
 
-  truncateTester();
-  recordTester();
+void blockTester(){
+  Block aBlock;
+  ofstream sequenceSetFile;
+  string fileName = "Sequence_Set.txt";
+  sequenceSetFile.open(fileName);
+  sequenceSetFile << "Hello File";
+  sequenceSetFile.close();
+
+  string records[4] = {"501", "544", "1001", ""};
+  string blockInfo = "   501   544  1001";
+
+  Block anotherBlock(records);
+  anotherBlock.write(fileName);
 }
 
 void truncateTester(){
