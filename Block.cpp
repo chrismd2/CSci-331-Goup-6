@@ -72,7 +72,7 @@ Block::Block(string _blockData)
   string tempStr = "";
   int recordNumber = 0;
   int j = 0; //pointer to track the position in the string
-  while(recordNumber < BLOCKFILLCOUNT)
+  while( j < _blockData.length() )
   {
     for(int i = 0; i < ZIPLENGTH; i++) //for each element of the pKey
     {
@@ -84,10 +84,10 @@ Block::Block(string _blockData)
     }
     records[recordNumber] = tempStr; //store the pKey in the class
     tempStr = ""; //clear the temp string
-    recordNumber++; //increment the record number
-    j++; //start at the beginning of the next pKey
     if(records[recordNumber] != ""){
       recordCount++; //update the number of records in the block
+	recordNumber++; //increment the record number
+    j++; //start at the beginning of the next pKey
     }
   }
 
