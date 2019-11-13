@@ -1,19 +1,58 @@
 #include <iostream>
 #include "Truncate.h"
 #include "Record.h"
+#include "Block.h"
 #include <string>
+#include <fstream>
 
 using namespace std;
 
 void truncateTester(); /**<Tests the Truncate Class*/
 void recordTester();
+void blockTester();
+void HeaderProgramming(string);  /**<Programs values into the header.cpp file as comments*/
 
 int main(){
-  cout << "Hello World\n"; //Hacked
-  //new stuff
+    if(DEBUG){
+        cout << "Hello World\n";
+    }
 
-  truncateTester();
-  recordTester();
+  //HeaderProgramming("1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
+  blockTester();
+}
+
+void blockTester(){
+  Block aBlock;
+  ofstream sequenceSetFile;
+  string fileName = "Sequence_Set.txt";
+  sequenceSetFile.open(fileName);
+  sequenceSetFile << "Hello File";
+  sequenceSetFile.close();
+
+  string records[4] = {"501", "544", "1001", ""};
+  string blockInfo = "   501   544  1001";
+
+  Block anotherBlock(records);
+  anotherBlock.write(fileName);
+  anotherBlock.getRecords();
+}
+
+void HeaderProgramming(string endString){
+  fstream postalCodes;
+  postalCodes.open("us_postal_codes_full.txt");
+  ofstream Header;
+  Header.open("Header.cpp", ios_base::app);
+  string str;
+  int headerLength = 0;
+  while(str != endString){
+    getline(postalCodes, str);
+    headerLength += str.length() + 1;
+  }
+  getline(postalCodes, str);
+  Header << "\n//Record length: " << str.length()+1;
+  Header << "\n//Header length: " << headerLength;
+  postalCodes.close();
+  Header.close();
 }
 
 void truncateTester(){
@@ -62,7 +101,7 @@ void recordTester(){
 
   cout << "Constructor2 record (record should be full):";
   testRecord2.display();
-	
+
 	//test constructor 3
   Grid grid_test(longitude_float, latitude_float);
 
