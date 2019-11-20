@@ -1,16 +1,22 @@
 /**---------------------------------------------------------------------------
-// @Block.h
-// Class Block (Contains Records)
-// @author Tyler Lahr and Sushan Tiwari  (Additional comments by Mark Christenson)
-//---------------------------------------------------------------------------
-// Block class:  Used by Sequence Set Class
-//   includes additional features:
-//   --
-//   --
-//   --
-//   --
-//   --
-//---------------------------------------------------------------------------**/
+ * @Block.h
+ * Class Block (Contains Records)
+ * @author Tyler Lahr, Sushan Tiwari, and Seth Pomahatch  
+ * (Additional comments by Mark Christenson)
+ *---------------------------------------------------------------------------
+ * Block class:  Used by Sequence Set Class
+ *   includes additional features:
+ *   -- Sets primary key of the record
+ *   -- Search the block
+ *	 -- Remove a record
+ *	 -- Add a record
+ *	 -- Get a record
+ *	 -- Move a record
+ *	 -- Get the next block pointer
+ *	 -- Get the previous block pointer
+ *	 -- Set the next block pointer
+ *	 -- Set the previous block pointer
+ *---------------------------------------------------------------------------*/
  
 #ifndef BLOCK_H
 #define BLOCK_H
@@ -23,38 +29,61 @@ using namespace std;
 
 class Block
 {
-   public:
-   /**  Default constructor
-    *    Preconditions:   None
-    *    Postconditions:  Empty block is created
-    */
-   Block();
-   
-   Block(string[]);
-
-   Block(string);
+  public:
+		/** Default constructor
+ 		 *  @pre None
+ 		 *  @post A blank Block object is created
+ 		 */
+  	Block();
+		/** Constructor with record numbers
+ 		 *  @pre The passed array must be of size fill count
+ 		 *  @post A block object is made using an array of primary keys
+ 		 */
+		Block(string[]);
+		/** Constructor with record numbers
+ 		 *  @pre A string
+ 		 *  @post A Block object is created using the string
+ 		 */
+  	Block(string);
+		/**
+ 		 * @pre A block
+ 		 * @post Writes the block to a file
+ 		 */
+ 		void write(string);
+		/** Searches for record
+ 		 * @pre Primary key
+ 		 * @post Returns the record or 0 if the record is not found
+ 		 */
+   	int search(string pKey);
+   	Block * getNextBlock(); /**< Gets pointer of next block */
+   	Block * getPreviousBlock(); /**< Gets pointer of previous block */
+   	void setNextBlock( Block * nextBlockPtr ); /**< Sets pointer to next block */
+   	void setPrevBlock( Block * previousBlockPtr ); /**< Sets pointer to previous block */
+		/**
+		 * @pre Primary key
+		 * @post Deletes the record with the given primary key
+		 */
+   	void deleteRecord(string pKey);
+		/**
+		 * @pre Primary key
+		 * @post Adds the record with the given primary key
+		 */
+   	bool addRecord(string pKey);
+		/**
+		 * @pre Block
+		 * @post Returns records in a block
+		 */
+   	void getRecords(Record[]);
+		string blockData(); /**< Returns RBN and records of the block*/
  
-   void write(string);
-   bool search(string pKey);
-   Block * getNextBlock();
-   Block * getPreviousBlock();
-   void setNextBlock( Block * nextBlockPtr );
-   void setPrevBlock( Block * previousBlockPtr );
-   void deleteRecord(string pKey);
-   void addRecord(string pKey);
-   void getRecords(Record[]);
-
-   string blockData();
- 
-   private:
-   void moveAroundRecord(string pKey);
- 
-   bool isEmpty;  /**< Bool for empty*/
-   unsigned long long relativeBlockNumber; /**< This blocks identity*/
-   int recordCount; /**< Current number of records in this block*/
-   string records[4]; /**< Record identities in this block*/
-   Block * nextBlock;  /**< Next block*/
-   Block * previousBlock; /**< Previous block*/
+  private:
+   	void sortRecord(); /**< Sorts the record */
+ 		bool isEmpty;  /**< Bool for empty*/
+   	unsigned long long relativeBlockNumber; /**< This blocks identity*/
+   	int recordCount; /**< Current number of records in this block*/
+   	string records[4]; /**< Record identities in this block*/
+   	Block * nextBlock;  /**< Next block*/
+  	Block * previousBlock; /**< Previous block*/
 };
  
 #include "Block.cpp"
