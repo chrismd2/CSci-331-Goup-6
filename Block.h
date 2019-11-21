@@ -63,7 +63,7 @@ class Block
 		 * @pre Primary key
 		 * @post Deletes the record with the given primary key
 		 */
-   	void deleteRecord(string pKey);
+   	bool deleteRecord(string pKey);
 		/**
 		 * @pre Primary key
 		 * @post Adds the record with the given primary key
