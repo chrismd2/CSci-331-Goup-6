@@ -1,13 +1,12 @@
 /**---------------------------------------------------------------------------
  * @SequenceSet.cpp
  * Block (Manages blocks)
- * @author Seth Pomahatch, Tiwari Sushan, Mark Christenson, Tyler, Ryan
+ * @author Seth Pomahatch, Tiwari Sushan, Mark Christenson, Tyler Lahr, Ryan Sweeney
  *---------------------------------------------------------------------------
  * SequenceSet:
  *   includes additional features:
- *   -- Sets primary key of the record
- *   -- Search the block
- *	 -- Remove a record
+ *   --
+ *   --
  *---------------------------------------------------------------------------
  */
 
@@ -21,6 +20,32 @@
 #include <fstream>
 
 using namespace std;
+
+//binarySearch recycled from block
+int binarySearchSS(const string arr[], string x, int n);
+
+SequenceSet::SequenceSet(){
+  ofstream SSFile;
+  SSFile.open(SSFileName);
+  SSFile << "Sequence Set File\n";
+  SSFile.close();
+  recordCount = getRecordCount();
+  fillIndex();
+  Block * currentBlock = headBlock;
+  blockCount = 0;
+  for(unsigned long long i = 0; i < recordCount; i++){
+    if(i%BLOCKFILLCOUNT == 0 && i != 0){
+	    if(DEBUG){cout << "Making a new block for the chain." << endl;}
+      blockCount++;
+      Block * newBlock = new Block(blockCount);
+      currentBlock->setNextBlock(newBlock);
+      newBlock->setPrevBlock(currentBlock);
+      currentBlock = newBlock;
+    }
+    if(DEBUG){cout<<"Passing "<<to_string(pKeyIndex.at(i))<<" into the add function."<<endl;}
+    currentBlock->addRecord(to_string(pKeyIndex.at(i)));
+  }
+}
 
 unsigned long long SequenceSet::headerLength(string _fileName){
   fstream data;
@@ -80,17 +105,14 @@ unsigned int SequenceSet::getRecordCount(){
     return recordCount;
 }
 
-int SequenceSet::test(){
-    string fileName = "us_postal_codes.txt";
+void SequenceSet::fillIndex(){
     string field;
     string str = "";
     char c;
     fstream data;
-    unsigned int recordCount = getRecordCount();
 
     data.open("RecordOffsets.txt");
 
-    unsigned int index[recordCount][2];
     for(unsigned int i = 0; i < recordCount; i++){
         string recordData = "";
         getline(data, recordData);
@@ -99,27 +121,41 @@ int SequenceSet::test(){
         for(int j = 0; j < ZIPLENGTH; j++){
           str += recordData[j];
         }
-        index[i][0] = stoi(str);  //five chars of string
+        //index[i][0] = stoi(str);  //five chars of string
+        pKeyIndex.push_back(stoi(str));
         if(DEBUG){cout << "String: " << str << endl;}
-        if(DEBUG){cout << "index[i][0]: " << index[i][0] <<endl;}
+        if(DEBUG){cout << "pKeyIndex.at(i): " << pKeyIndex.at(i) <<endl;}
         str = "";
         for(int j = ZIPLENGTH; j < recordData.length(); j++){
           str += recordData[j];
         }
-        index[i][1] = stoi(str);  //the rest of the string
+        //index[i][1] = stoi(str);  //the rest of the string
+        offsetIndex.push_back(stoi(str));
         if(DEBUG){cout << "String: " << str << endl;}
-        if(DEBUG){cout << "index[i][1]: " << index[i][1] <<endl;}
+        if(DEBUG){cout << "offsetIndex.at("<<i<<"): " << offsetIndex.at(i) <<endl;}
     }
     data.close();
+}
 
-    int randomRecord = rand() % recordCount;
-    cout << "Retrieving record: " << index[randomRecord][0] << endl;
-    data.open(fileName);
-    data.seekg(index[randomRecord][1]);
-    getline(data, str);
-    cout << str << endl;
+string SequenceSet::fetch(string pKey){
+  fstream data;
+  data.open(DATAFILENAME);
+  string returnString = pKey;
+  returnString += " not found.\n";
 
-    return 0;
+  int position = binarySearchSS(pKey);
+  if(DEBUG) {cout << "Searching "<< pKey << " returned: " << position << endl;}
+  if(position>=0){
+    data.seekg(offsetIndex.at(binarySearchSS(pKey)));
+    getline(data, returnString);
+  }
+  data.close();
+
+  return returnString;
+}
+
+string SequenceSet::fetch(unsigned int pKey){
+  return fetch(to_string(pKey));
 }
 
 void SequenceSet::makeRecordOffsets(string fileName){
@@ -149,4 +185,148 @@ void SequenceSet::makeRecordOffsets(string fileName){
 
     data.close();
     index.close();
+}
+
+/** Searches block for record by primary key
+ * @pre Primary key
+ * @post Returns true if found otherwise returns false
+ */
+int SequenceSet::binarySearchSS(string x)
+{
+	//int int_arr[n];
+	unsigned int n = recordCount;
+	int int_string;
+/*
+	//convert the records (array of strings) to array of int
+	for (unsigned int i = 0; i < n; i++)
+	{
+    if(arr[i] != null_str)
+		  int_arr[i] = stoi(arr[i]);
+	}
+*/
+	//convert string to find to int
+	int_string = stoi(x);
+
+    unsigned int l = 0 ;
+    unsigned int r = n - 1;
+    while (l <= r)
+    {
+      int m = l + (r - l) / 2;
+		  if(DEBUG) {cout << "mid: " << m <<endl;}
+
+      //if(DEBUG) {cout << "comparing " << int_string << " and " << int_arr[m] <<endl;}
+      if(DEBUG) {cout << "comparing " << int_string << " and " << pKeyIndex.at(m) <<endl;}
+
+    	if ( pKeyIndex.at(m) == int_string ){
+        if(DEBUG) {cout << "record found" <<endl;}
+        return m;
+		  }
+
+      // If x is greater, ignore left half
+      if ( pKeyIndex.at(m) < int_string ){
+        l = m + 1;
+        if(DEBUG) {cout << "new l: " << l <<endl;}
+      }
+
+        // If x is smaller, ignore right half
+      else{
+        r = m - 1;
+        if(DEBUG) {cout << "new r: " << l <<endl;}
+      }
+    }
+
+    return -1;
+}
+
+Record SequenceSet::fillRecord(string RecordString){
+  string zip_code, place_name, state, county, latitude, longitude;
+  int position = 0;
+  if(DEBUG){cout  << "In fillRecord for Sequence Set Class\n\tRecordString: " 
+                  << RecordString << endl;}
+  zip_code = "";
+  for(auto i = 0; i < ZIPLENGTH; i++){
+    position++;
+    if(RecordString[position] != ' '){
+      zip_code += RecordString[position];
+    }
+  }
+
+  place_name = "";
+  for(int i = 0; i < 30/*Length of place name*/; i++){
+    position++;
+    if(RecordString[position] != ' '){
+      place_name += RecordString[position];
+    }
+  }
+
+  state = "";
+  for(int i = 0; i < 2/*Length of state*/; i++){
+    position++;
+    if(RecordString[position] != ' '){
+      state += RecordString[position];
+    }
+  }
+
+  county = "";
+  for(int i = 0; i < 37/*Length of county*/; i++){
+    position++;
+    if(RecordString[position] != ' '){
+      county += RecordString[position];
+    }
+  }
+
+  latitude = "";
+  for(int i = 0; i < 7/*Length of latitude*/; i++){
+    position++;
+    if(RecordString[position] != ' '){
+      latitude += RecordString[position];
+    }
+  }
+
+  longitude = "";
+  for(int i = 0; i < 8/*Length of longitude*/; i++){
+    position++;
+    if(RecordString[position] != ' '){
+      longitude += RecordString[position];
+    }
+  }
+  if(DEBUG){cout  << "\tRecordElements: " 
+                  << zip_code << place_name << state << county 
+                  << latitude << longitude << endl;}
+
+  Record returnRecord(zip_code, place_name, state, county, latitude, longitude);
+
+  returnRecord.display();
+
+  return returnRecord;  
+}
+
+void SequenceSet::writeBlocks(){
+  Block * currentBlock = headBlock;
+  for(auto i = 0; i < blockCount; i ++){
+    if(DEBUG){cout << "Writing block "<< i <<" from the chain." << endl;}
+    currentBlock->write(SSFileName);
+    currentBlock = currentBlock->getNextBlock();
+  }
+}
+
+int SequenceSet::test(){
+    string field;
+    string str = "";
+    char c;
+    fstream data;
+
+    int randomRecord = rand() % recordCount;
+    //cout << "Retrieving record: " << index[randomRecord][0] << endl;
+    cout << "Retrieving record: " << pKeyIndex.at(randomRecord) << endl;
+    data.open(DATAFILENAME);
+    //data.seekg(index[randomRecord][1]);
+    data.seekg(offsetIndex.at(randomRecord));
+    getline(data, str);
+    cout << str << endl;
+
+    cout << fetch(56303) << endl;
+    fillRecord(fetch(56303));
+
+    return 0;
 }

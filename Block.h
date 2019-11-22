@@ -35,6 +35,14 @@ class Block
  		 *  @post A blank Block object is created
  		 */
   	Block();
+
+		/** Relative Block Number constructor
+ 		 *  @pre None
+ 		 *  @post A blank Block object is created
+ 		 */
+    	Block(unsigned long long);
+
+
 		/** Constructor with record numbers
  		 *  @pre The passed array must be of size fill count
  		 *  @post A block object is made using an array of primary keys

@@ -11,15 +11,47 @@ using namespace std;
 void truncateTester(); /**<Tests the Truncate Class*/
 void recordTester();
 void blockTester();
+void nullblockTester();
 
 int main(){
-  //blockTester();
+  //nullblockTester();
 
-  SequenceSet SSClass;
-  SSClass.test();
+  SequenceSet SSClass; SSClass.test();
   return 0;
 }
 
+void nullblockTester(){
+  Block * aBlock;
+  ofstream sequenceSetFile;
+  string fileName = "Sequence_Set.txt";
+  sequenceSetFile.open(fileName);
+  sequenceSetFile << "Hello File\n";
+  sequenceSetFile.close();
+
+  string records[4] = {"501", "544", "1001", ""};
+  string blockInfo = "   501   544  1001  1002";
+
+  //test block constructor
+  Block anotherBlock(blockInfo);
+  anotherBlock.write(fileName);
+
+  //test block search method
+  string recordTest = "1002";
+  aBlock = new Block(1);
+  cout << "Return 1 if the record was found: " << aBlock->search( recordTest ) << endl;
+
+  recordTest = "103";
+  aBlock->addRecord(recordTest);
+
+  recordTest = "103";
+  aBlock->addRecord(recordTest);
+
+  recordTest = "544";
+  aBlock->deleteRecord(recordTest);
+
+  recordTest = "514";
+  aBlock->deleteRecord(recordTest);
+}
 
 void blockTester(){
   Block aBlock;

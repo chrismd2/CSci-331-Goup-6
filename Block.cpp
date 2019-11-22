@@ -1,7 +1,7 @@
 /**---------------------------------------------------------------------------
  * @Block.cpp
  * Block (Manages blocks)
- * @author Tyler Lahr, Sushan Tiwari, and Seth Pomahatch  
+ * @author Tyler Lahr, Sushan Tiwari, Ryan Sweeney, and Seth Pomahatch  
  * (Additional comments by Mark Christenson)
  *---------------------------------------------------------------------------
  * Block:
@@ -39,8 +39,23 @@ const int NULL_INT = 1000000;
 
 Block::Block()
 {
-  isEmpty = true; 
+  isEmpty = true;
   relativeBlockNumber = 0;
+  recordCount = 0;
+  for(int i = 0; i < RECORDSPERBLOCK; i++){
+    records[i] = "";
+  }
+ 
+  nextBlock = nullptr;
+  previousBlock = nullptr;
+
+  if(DEBUG) {cout << "Made an empty block.\n";}
+}
+
+Block::Block(unsigned long long _RBN)
+{
+  isEmpty = true;
+  relativeBlockNumber = _RBN;
   recordCount = 0;
   for(int i = 0; i < RECORDSPERBLOCK; i++){
     records[i] = "";
@@ -162,6 +177,7 @@ void Block::write(string _fileName)
       if(DEBUG){cout << " ";}
     }
   }
+  file << "\n";
   if(DEBUG)(cout << "\"\n");
   file.close();
 }
