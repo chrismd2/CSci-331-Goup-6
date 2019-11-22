@@ -84,8 +84,8 @@ void Record::display()
 {
     if(DEBUG) {cout << "Displaying the whole record from the record.\n";}
     cout << endl
-       << "Zipcode: " << get_field("Zipcode")
-       << " Place: " << get_field("Place")
+       << "Zipcode: " << get_field("Zip")
+       << " Place: " << get_field("City")
        << " State: " << get_field("State")
        << " County: " << get_field("County")
        << " Longitude: " << get_field("Longitude")
