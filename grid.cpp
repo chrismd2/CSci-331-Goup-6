@@ -91,7 +91,7 @@ void Grid::setLongitude(float _longitude){
  *  @post Sets longitude for grid object
  */
 void Grid::setLongitude(string _longitude){
-	setLatitude(stof(_longitude));  
+	setLongitude(stof(_longitude));  
 }
 
 /**  Gets Latitude for this grid object
