@@ -40,7 +40,7 @@ class Block
  		 *  @pre None
  		 *  @post A blank Block object is created
  		 */
-    	Block(unsigned long long);
+    Block(unsigned long long _RBN);
 
 
 		/** Constructor with record numbers
@@ -81,7 +81,7 @@ class Block
 		 * @pre Block
 		 * @post Returns records in a block
 		 */
-   	void getRecords(Record[]);
+   	void getRecords(Record block[]);
 		string blockData(); /**< Returns RBN and records of the block*/
  
   private:

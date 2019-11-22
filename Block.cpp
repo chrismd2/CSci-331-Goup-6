@@ -277,7 +277,11 @@ bool Block::addRecord(string pKey)
  
 void Block::getRecords(Record block[])
 {
-  if(DEBUG) {cout << ".\n";}
+  if(DEBUG) {cout << "Setting record zips\n";}
+  
+  for(auto i = 0; i < RECORDSPERBLOCK; i++){
+    block[i].set_field("ZIP", records[i]);
+  }
   
   Record record;
   record.set_field("ZIP", "56303");
