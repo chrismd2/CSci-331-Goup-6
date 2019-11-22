@@ -281,10 +281,11 @@ void Block::getRecords(Record block[])
   
   for(auto i = 0; i < RECORDSPERBLOCK; i++){
     block[i].set_field("ZIP", records[i]);
+    if(DEBUG){
+      cout<< "Block["<<i<<"]: " << endl;
+      block[i].display();
+    }
   }
-  
-  Record record;
-  record.set_field("ZIP", "56303");
 }
  
 void Block::sortRecord()
