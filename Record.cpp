@@ -65,8 +65,24 @@ Record::Record(string _zip_code, string _place_name, string _state, string _coun
  */
 Record::Record(string _zip_code, string _place_name, string _state, string _county, string latitude, string longitude)
 {
-  float lon = string_to_float( longitude );
-  float lat = string_to_float( latitude );
+  float lon;
+  float lat;
+
+  try{
+    lon = string_to_float( longitude );
+  }
+  catch(...){
+    cout << "ERROR SETTING LONGITUDE, SETTING IT TO 0\n";
+    lon = 0;
+  }
+
+  try{
+    lat = string_to_float( latitude );
+  }
+  catch(...){
+    cout << "ERROR SETTING LATITUDE IN " << zip_code << ", SETTING IT TO 0\n";
+    lat = 0;
+  }
 
   zip_code = _zip_code;
   place_name = _place_name;
