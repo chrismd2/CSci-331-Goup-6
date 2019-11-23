@@ -55,6 +55,12 @@ public:
     */
     void fillIndex();
 
+    /**  fillRecordBlock
+    *    Preconditions:     blockID must be less than the block count
+    *    Postconditions:    Block is loaded into a record block
+    */
+    void fillRecordBlock(unsigned long long blockID);
+
     /**  writeBlocks
     *    Preconditions:     None
     *    Postconditions:    All blocks are called to run their write function
@@ -63,6 +69,7 @@ public:
 
     /**  fillRecord
     *    Preconditions:     Record string must follow parameter conventions
+    *                       Record string must be complete, call fetch if needed
     *    Postconditions:    A record string is loaded into a record object
     */
     Record fillRecord(string RecordString);

@@ -15,6 +15,7 @@ void nullblockTester();
 
 int main(){
   //nullblockTester();
+  //recordTester();
 
   SequenceSet SSClass; SSClass.test();
   return 0;
@@ -108,7 +109,7 @@ void recordTester(){
   string place = "Little Falls";
   string state = "Minnesota";
   string county = "Morrison";
-  string longitude = "74.25";
+  string longitude = "-74.25";
   string latitude = "79.72";
 
   cout << "Fill Record with : " << zip << " " << place << " " << state << " " << county << " " << longitude << " " << latitude;
@@ -124,7 +125,7 @@ void recordTester(){
   cout << endl;
 
   //test constructor 2
-  float longitude_float = 74.25;
+  float longitude_float = -74.25;
   float latitude_float = 79.72;
 
   Record testRecord2(zip, place, state, county, longitude, latitude);

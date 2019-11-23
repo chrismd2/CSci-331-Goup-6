@@ -45,6 +45,7 @@ SequenceSet::SequenceSet(){
     if(DEBUG){cout<<"Passing "<<to_string(pKeyIndex.at(i))<<" into the add function."<<endl;}
     currentBlock->addRecord(to_string(pKeyIndex.at(i)));
   }
+  writeBlocks();
 }
 
 unsigned long long SequenceSet::headerLength(string _fileName){
@@ -140,12 +141,17 @@ void SequenceSet::fillIndex(){
 string SequenceSet::fetch(string pKey){
   fstream data;
   data.open(DATAFILENAME);
-  string returnString = pKey;
+  string returnString = "";
+  for(int i = ZIPLENGTH - pKey.length(); i > 0; i--){
+    if(DEBUG){cout << "For loop in fetch. i = " << i << endl;}
+    returnString += " ";
+  }
+  returnString = pKey;
   returnString += " not found.\n";
 
   int position = binarySearchSS(pKey);
   if(DEBUG) {cout << "Searching "<< pKey << " returned: " << position << endl;}
-  if(position>=0){
+  if(position>=0 && pKey != ""){
     data.seekg(offsetIndex.at(binarySearchSS(pKey)));
     getline(data, returnString);
   }
@@ -205,9 +211,9 @@ int SequenceSet::binarySearchSS(string x)
 	}
 */
 	//convert string to find to int
-	int_string = stoi(x);
-
-    unsigned int l = 0 ;
+	if(DEBUG){cout << "(stoi)ing this string: \"" << x << "\"\n";}
+	try{
+    int_string = stoi(x);    unsigned int l = 0 ;
     unsigned int r = n - 1;
     while (l <= r)
     {
@@ -234,6 +240,8 @@ int SequenceSet::binarySearchSS(string x)
         if(DEBUG) {cout << "new r: " << l <<endl;}
       }
     }
+}
+	catch(...){cout << "ERROR (stoi)ING THIS STRING: \"" << x << "\"\n";}
 
     return -1;
 }
@@ -244,59 +252,60 @@ Record SequenceSet::fillRecord(string RecordString){
   if(DEBUG){cout  << "In fillRecord for Sequence Set Class\n\tRecordString: " 
                   << RecordString << endl;}
   zip_code = "";
-  for(auto i = 0; i < ZIPLENGTH; i++){
-    position++;
+  for(auto i = 0; i < ZIPLENGTH	; i++){
     if(RecordString[position] != ' '){
       zip_code += RecordString[position];
     }
+    position++;
   }
 
   place_name = "";
-  for(int i = 0; i < 30/*Length of place name*/; i++){
-    position++;
+  for(int i = 0; i < 31/*Length of place name*/; i++){
     if(RecordString[position] != ' '){
       place_name += RecordString[position];
     }
+    position++;
   }
 
   state = "";
   for(int i = 0; i < 2/*Length of state*/; i++){
-    position++;
     if(RecordString[position] != ' '){
       state += RecordString[position];
     }
+    position++;
   }
 
   county = "";
-  for(int i = 0; i < 37/*Length of county*/; i++){
-    position++;
+  for(int i = 0; i < 38/*Length of county*/; i++){
     if(RecordString[position] != ' '){
       county += RecordString[position];
     }
+    position++;
   }
 
   latitude = "";
-  for(int i = 0; i < 7/*Length of latitude*/; i++){
-    position++;
+  for(int i = 0; i < 9/*Length of latitude*/; i++){
     if(RecordString[position] != ' '){
       latitude += RecordString[position];
     }
+    position++;
   }
 
   longitude = "";
   for(int i = 0; i < 8/*Length of longitude*/; i++){
-    position++;
     if(RecordString[position] != ' '){
       longitude += RecordString[position];
     }
+    position++;
   }
-  if(DEBUG){cout  << "\tRecordElements: " 
-                  << zip_code << place_name << state << county 
-                  << latitude << longitude << endl;}
+  if(DEBUG){cout  << "\tRecordElements: " << "\n\t\t" 
+                  << zip_code << "\n\t\t" << place_name << "\n\t\t" 
+		              << state << "\n\t\t" << county << "\n\t\t" 
+                  << latitude << "\n\t\t" << longitude << endl;}
 
   Record returnRecord(zip_code, place_name, state, county, latitude, longitude);
 
-  returnRecord.display();
+  if(DEBUG){returnRecord.display();}
 
   return returnRecord;  
 }
@@ -307,6 +316,27 @@ void SequenceSet::writeBlocks(){
     if(DEBUG){cout << "Writing block "<< i <<" from the chain." << endl;}
     currentBlock->write(SSFileName);
     currentBlock = currentBlock->getNextBlock();
+  }
+}
+
+void SequenceSet::fillRecordBlock(unsigned long long blockID){
+  string str, zip, passed;
+  Block * currentBlock = headBlock;
+  for(auto i = 0; i < blockID; i++){
+    currentBlock = currentBlock->getNextBlock();
+  }
+
+  currentBlock->getRecords(recordBlock);
+  for(auto i = 0; i < RECORDSPERBLOCK; i++){
+    passed = fetch(recordBlock[i].get_field("ZIP"));
+    if(DEBUG){
+      cout  << "\n******************************************" 
+            << "\nString passed to fill record: " << passed << endl;
+    }
+    if(passed != " not found.\n"){
+      recordBlock[i] = fillRecord(passed);
+      if(DEBUG){recordBlock[i].display();}
+    }
   }
 }
 
@@ -325,8 +355,13 @@ int SequenceSet::test(){
     getline(data, str);
     cout << str << endl;
 
-    cout << fetch(56303) << endl;
-    fillRecord(fetch(56303));
+    cout << fetch(1721) << endl;
+    fillRecordBlock(88);
+
+    for(auto i = 0; i < RECORDSPERBLOCK; i++){
+      if(DEBUG){cout <<"\n***********************************\n";}
+      recordBlock[i].display();
+    }
 
     return 0;
 }

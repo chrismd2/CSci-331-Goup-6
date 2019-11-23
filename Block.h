@@ -89,7 +89,7 @@ class Block
  		bool isEmpty;  /**< Bool for empty*/
    	unsigned long long relativeBlockNumber; /**< This blocks identity*/
    	int recordCount; /**< Current number of records in this block*/
-   	string records[4]; /**< Record identities in this block*/
+   	string records[RECORDSPERBLOCK]; /**< Record identities in this block*/
    	Block * nextBlock;  /**< Next block*/
   	Block * previousBlock; /**< Previous block*/
 };
