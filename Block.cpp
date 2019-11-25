@@ -216,6 +216,17 @@ void Block::setPrevBlock( Block * previousBlockPtr )
 
   if(DEBUG) {cout << "Pointer to the previous block has been set.\n";}
 }
+
+int Block::getRecordCount()
+{
+  return recordCount;
+}
+
+int Block::getLastRecordPKey()
+{
+  if(DEBUG) {cout << "Getting last record of the block\n";}
+  return stoi( records[ recordCount - 1 ] );
+}
  
 bool Block::deleteRecord(string pKey)
 {
@@ -288,6 +299,14 @@ void Block::getRecords(Record block[])
   }
 }
  
+unsigned long long Block::getRBN(){
+  return relativeBlockNumber;
+}
+
+void Block::setRBN(unsigned long long RBN){
+  relativeBlockNumber = RBN;
+}
+
 void Block::sortRecord()
 {
   if(DEBUG) {cout << "Sorting the records in the block.\n";}

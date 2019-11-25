@@ -1,15 +1,16 @@
-/**---------------------------------------------------------------------------
- * @SequenceSet.cpp
- * Block (Manages blocks)
- * @author Seth Pomahatch, Tiwari Sushan, Mark Christenson, Tyler Lahr, Ryan Sweeney
- *---------------------------------------------------------------------------
- * SequenceSet:
+/**-------------------------------------------------------------------------------------------------
+ * @SequenceSet.h
+ * Class Sequence set
+ * @author Tyler Lahr, Seth Pomahatch, Sushan Tiwari, Ryan Sweeney,  
+ * (Additional comments by Mark Christenson)
+ *-------------------------------------------------------------------------------------------------
+ * Block class:  Used by Sequence Set Class
  *   includes additional features:
+ *   --Make record offsets
  *   --
- *   --
- *---------------------------------------------------------------------------
+ -------------------------------------------------------------------------------------------------
  */
-
+ 
 #include "SequenceSet.h"
 #include <iostream>
 #include "Truncate.h"
@@ -18,6 +19,8 @@
 #include "SequenceSet.h"
 #include <string>
 #include <fstream>
+#include <vector>
+#include <stdio.h>
 
 using namespace std;
 
@@ -46,6 +49,13 @@ SequenceSet::SequenceSet(){
     currentBlock->addRecord(to_string(pKeyIndex.at(i)));
   }
   writeBlocks();
+
+  //reset the record avail list
+  ofstream recordAvailList;
+  recordAvailList.open(recordAvailListFileName);
+  recordAvailList << "";
+  recordAvailList.close();
+  sKeyStateBuilder();
 }
 
 unsigned long long SequenceSet::headerLength(string _fileName){
@@ -149,7 +159,10 @@ string SequenceSet::fetch(string pKey){
   returnString = pKey;
   returnString += " not found.\n";
 
-  int position = binarySearchSS(pKey);
+  int position;
+  if(pKey != ""){
+    position = binarySearchSS(pKey);
+  }
   if(DEBUG) {cout << "Searching "<< pKey << " returned: " << position << endl;}
   if(position>=0 && pKey != ""){
     data.seekg(offsetIndex.at(binarySearchSS(pKey)));
@@ -327,17 +340,276 @@ void SequenceSet::fillRecordBlock(unsigned long long blockID){
   }
 
   currentBlock->getRecords(recordBlock);
-  for(auto i = 0; i < RECORDSPERBLOCK; i++){
+  for(auto i = 0; i < currentBlock->getRecordCount(); i++){
     passed = fetch(recordBlock[i].get_field("ZIP"));
     if(DEBUG){
       cout  << "\n******************************************" 
             << "\nString passed to fill record: " << passed << endl;
     }
-    if(passed != " not found.\n"){
+    if(passed != " not found.\n" && passed != " not found."){
       recordBlock[i] = fillRecord(passed);
       if(DEBUG){recordBlock[i].display();}
     }
   }
+}
+
+void SequenceSet::addBlockStateKey(unsigned long long blockID){
+  fillRecordBlock(blockID);
+  Block * currentBlock = headBlock;
+
+  for(auto i = 0; i < blockID; i++){
+    currentBlock = currentBlock->getNextBlock();
+  }
+
+  for(auto i = 0; i < currentBlock->getRecordCount(); i++){
+    string state = recordBlock[i].get_field("state");
+
+    for(auto i = 0; i < RECORDSPERBLOCK; i++){
+      string state = recordBlock[i].get_field("state");
+
+      if(state != ""){
+	bool stateFound = false;
+	unsigned int index = 0;
+
+	if(stateZips.size() == 0){
+	        vector <string> newRow;
+        	newRow.push_back(state);
+	        stateZips.push_back(newRow);
+	}
+
+	while(index < stateZips.size() && !stateFound){
+		if(stateZips[index].at(0) == state){
+			if(DEBUG){cout << "Found " << state << " at index = " << index << endl;}
+			stateFound = true;
+		}
+		else{index++;}
+	}
+
+	if(!stateFound){
+		if(DEBUG){cout << state<<" not found.\n";}
+	        vector <string> newRow;
+        	newRow.push_back(state);
+	        stateZips.push_back(newRow);
+		if(DEBUG){cout << stateZips[index].at(0)<<" pushed successfully.\n";}
+		if(DEBUG){
+			stateZips[index].push_back(":)");
+			cout << "Pushing a smily :)\n";
+			cout << stateZips[index].at(1) << endl;
+			stateZips[index].pop_back();
+		}
+	}
+
+	if(DEBUG){cout << "Pushing " << recordBlock[i].get_field("zip") <<" to "<< index <<" column.\n";}
+	stateZips[index].push_back(recordBlock[i].get_field("zip"));
+	//if(DEBUG){cout << stateZips[index].at(stateZips[index].size())<<" pushed successfully.\n";}
+
+
+	if(DEBUG){cout	<< stateZips[index].at(0) << ": " 
+		<< stateZips[index].at(stateZips[index].size()-1) << endl;}
+      }
+    }
+  }
+}
+
+
+bool SequenceSet::deleteRecord(int pKey)
+{
+  //search if the record is in the sequence set
+  int position = binarySearchSS( to_string(pKey) );
+  if(DEBUG) {cout << "Searching for "<< pKey << " returned: " << position << endl;}
+  if(position == -1){
+    cout << "Record does not exist in Sequence Set." << endl;
+    return false;
+  }
+  else{
+    //add deleted record offset to avail list
+	string strTemp = "";
+	string newString = "";
+	fstream recordAvailListIn;
+	recordAvailListIn.open(recordAvailListFileName);
+	while(recordAvailListIn.peek() != EOF){
+		strTemp += recordAvailListIn.get();
+		if(DEBUG){cout << strTemp << endl;}
+    }
+	newString = to_string( offsetIndex.at(position) ) + "/" + to_string( position ) + "\n" + strTemp;
+	if(DEBUG){cout << newString << " result" << endl;}
+	recordAvailListIn.close();
+	
+    ofstream recordAvailList;
+    recordAvailList.open(recordAvailListFileName);
+    recordAvailList << newString;
+    recordAvailList.close();
+
+    //delete record from us_postal_codes.txt
+    fstream usPostalCodes;
+    usPostalCodes.open("us_postal_codes.txt");
+    usPostalCodes.seekg(offsetIndex.at(position));
+    for(int i = 0; i < 94; i++){ //94 is the length of record
+      usPostalCodes << " ";
+    }
+    usPostalCodes.close();
+
+    //delete record in index vector 
+    pKeyIndex.erase(pKeyIndex.begin() + position);
+    offsetIndex.erase(offsetIndex.begin() + position);
+	  if(DEBUG) {position = binarySearchSS( to_string(pKey) );}
+    if(DEBUG) {cout << "Deleted record in index vector. Researching for "<< pKey << " returned: " << position << endl;}
+    recordCount--; //decrement the total record count
+
+    //delete record in linked list of blocks
+    Block * currentBlock = headBlock;
+    for(auto i = 0; i < blockCount; i ++){
+      if(DEBUG){cout << "Searching block "<< i <<" from the chain." << endl;}
+      if( pKey <= currentBlock->getLastRecordPKey() ){
+        currentBlock->deleteRecord( to_string(pKey) );
+        break;
+      }
+      else{
+        currentBlock = currentBlock->getNextBlock();
+      }
+    }
+
+    //merge blocks if needed
+    if( currentBlock->getRecordCount() < RECORDSPERBLOCK / 2 ){
+      //check next block to see if it can merge
+      if( (currentBlock->getNextBlock())->getRecordCount() == RECORDSPERBLOCK / 2 ){
+        currentBlock->getRecords( recordBlock ); //get the pkeys
+        for(int i = 0; i < currentBlock->getRecordCount(); i++){
+          (currentBlock->getNextBlock())->addRecord(recordBlock[i].get_field("zip"));
+          currentBlock->deleteRecord( recordBlock[i].get_field("zip") );
+        }
+          //add the pointer to the current block to the avail vector
+          blockAvailList.push_back( currentBlock );
+          //change the pointers to avoid the empty block
+          currentBlock->getPreviousBlock()->setNextBlock( currentBlock->getNextBlock() );
+          currentBlock->getNextBlock()->setPrevBlock( currentBlock->getPreviousBlock() );
+          blockCount--;
+      }
+      //check if previous block can merge
+      else if( (currentBlock->getPreviousBlock())->getRecordCount() == RECORDSPERBLOCK / 2 ){
+        currentBlock->getRecords( recordBlock ); //get the pkeys
+        for(int i = 0; i < currentBlock->getRecordCount(); i++){
+          (currentBlock->getPreviousBlock())->addRecord(recordBlock[i].get_field("zip"));
+          currentBlock->deleteRecord( recordBlock[i].get_field("zip") );
+        }
+          //add the pointer to the current block to the avail vector
+          blockAvailList.push_back( currentBlock );
+          //change the pointers to avoid the empty block
+          currentBlock->getPreviousBlock()->setNextBlock( currentBlock->getNextBlock() );
+          currentBlock->getNextBlock()->setPrevBlock( currentBlock->getPreviousBlock() );
+          blockCount--;
+      }
+      //check if next block can redistribute
+      else if( (currentBlock->getNextBlock())->getRecordCount() > RECORDSPERBLOCK / 2 ){
+        (currentBlock->getNextBlock())->getRecords( recordBlock ); //get the pkeys
+        currentBlock->addRecord( recordBlock[0].get_field("zip") );
+        (currentBlock->getNextBlock())->deleteRecord( recordBlock[0].get_field("zip") );
+      }
+      //check if previous block can redistribute ???Will Never Happen??????????????????????????????????????????????????????????????????????????????????????
+      // else if( (currentBlock->getPreviousBlock())->getRecordCount() > RECORDSPERBLOCK / 2 ){
+      //   (currentBlock->getPreviousBlock())->getRecords( recordBlock ); //get the pkeys
+      //   currentBlock->addRecord( recordBlock[0].get_field("zip") );
+      //   (currentBlock->getNextBlock())->deleteRecord( recordBlock[0].get_field("zip") );
+      //}
+    }
+	rewriteSSFile();
+    return true;
+  }
+}
+
+string SequenceSet::extremeCoord(string state, char direction)
+{
+  direction = toupper(direction);
+	float extremePoint = 0;
+	string zip = "";
+  for(int i = 0; i < 2; i++){
+    zip+=toupper(state[i]);
+  }
+  state = zip;
+	zip = "";
+  Record currentRecord;
+  string str = state;
+
+  bool found = false;
+  unsigned int index = 0;
+  while(index < stateZips.size() - 1 && !found){
+    if(stateZips[index][0] == str){found = true;}
+    else{index++;}
+  }
+  currentRecord = fillRecord(fetch(stateZips[index][1]));
+  
+	switch(direction)
+	{
+		case 'N':
+		{
+      extremePoint = stof(currentRecord.get_field("Lat"));
+      zip = currentRecord.get_field("zip");
+			for(int i = 1; i < stateZips[index].size(); i++)
+			{
+				currentRecord = fillRecord(fetch(stateZips[index][i]));
+				if(extremePoint < stof(currentRecord.get_field("Lat")))
+				{
+          zip = currentRecord.get_field("zip");
+					extremePoint = stof(currentRecord.get_field("Lat"));
+				}
+			}
+		}
+		break;
+
+		case 'E':
+		{
+			extremePoint = stof(currentRecord.get_field("Long"));
+			zip = currentRecord.get_field("zip");
+			for(int i = 1; i < stateZips[index].size(); i++)
+			{
+				currentRecord = fillRecord(fetch(stateZips[index][i]));
+				if(extremePoint < stof(currentRecord.get_field("Long")))
+				{
+          zip = currentRecord.get_field("zip");
+					extremePoint = stof(currentRecord.get_field("Long"));
+				}
+			}
+		}
+		break;
+
+		case 'S':
+		{
+			extremePoint = stof(currentRecord.get_field("Lat"));
+			zip = currentRecord.get_field("zip");
+			for(int i = 1; i < stateZips[index].size(); i++)
+			{
+				currentRecord = fillRecord(fetch(stateZips[index][i]));
+				if(extremePoint > stof(currentRecord.get_field("Lat")))
+				{
+          zip = currentRecord.get_field("zip");
+					extremePoint = stof(currentRecord.get_field("Lat"));
+				}
+			}
+		}
+		break;
+
+		case 'W':
+		{
+			extremePoint = stof(currentRecord.get_field("Long"));
+			zip = currentRecord.get_field("zip");
+			for(int i = 1; i < stateZips[index].size(); i++)
+			{
+				currentRecord = fillRecord(fetch(stateZips[index][i]));
+				if(extremePoint > stof(currentRecord.get_field("Long")))
+				{
+          zip = currentRecord.get_field("zip");
+					extremePoint = stof(currentRecord.get_field("Long"));
+				}
+			}
+		}
+		break;
+
+    default:
+    {
+      cout << "UNDEFINED OPTION\n";
+    }
+	}
+	return zip;
 }
 
 int SequenceSet::test(){
@@ -363,5 +635,232 @@ int SequenceSet::test(){
       recordBlock[i].display();
     }
 
+    sKeyStateBuilder();
+    
+    unsigned int index = 0;
+    unsigned int record = 1;
+    Record currentRecord;
+    
+    str = "MN";
+    bool found = false;
+    while(index < stateZips.size() && !found){
+      if(stateZips[index][0] == str){found = true;}
+      else{index++;}
+    }
+
+    while(record < stateZips[index].size()){
+      str = fetch(stateZips[index][record]);
+      cout << str << endl;
+      currentRecord = fillRecord(str);
+      currentRecord.display();
+      record++;
+    }
+
+    cout << extremeCoord(str, 'n') << endl;
+
     return 0;
+}
+
+
+void SequenceSet::sKeyStateBuilder(){
+    if(DEBUG){cout << "Building sKeys for states.\n";}
+    Block * currentBlock = headBlock;
+    unsigned int index = 0;
+    while(currentBlock!=NULL){
+      addBlockStateKey(index);
+      currentBlock = currentBlock->getNextBlock();
+      index++;
+    }
+}
+
+void SequenceSet::addRecord(Record record)
+{
+	//search record in linked list of blocks
+	Block * currentBlock = headBlock;
+	for(auto i = 0; i < blockCount; i ++){
+		if(DEBUG){cout << "Searching block "<< i <<" from the chain." << endl;}
+		if( stoi( record.get_field("zip") ) <= currentBlock->getLastRecordPKey() ){ //find the right block
+      if(currentBlock->getRecordCount() == RECORDSPERBLOCK){ //if the block is full, do block splitting
+        if( !blockAvailList.empty() ){  //if there exists a current empty block
+          Block* tempBlockPtr = blockAvailList.back(); //get the pointer to the empty block
+          blockAvailList.pop_back();  //delete the pointer from the avail list
+          //add the relative block to the linked list
+          tempBlockPtr->setNextBlock( currentBlock->getNextBlock() );
+          tempBlockPtr->setPrevBlock( (currentBlock->getNextBlock())->getPreviousBlock() );
+          (currentBlock->getNextBlock())->setPrevBlock(tempBlockPtr);
+          currentBlock->setNextBlock(tempBlockPtr);
+          //split the data into the new block number
+          currentBlock->getRecords( recordBlock ); //get the pkeys
+          for(int i = RECORDSPERBLOCK / 2; i < RECORDSPERBLOCK; i++){
+            (currentBlock->getNextBlock())->addRecord(recordBlock[i].get_field("zip"));
+            currentBlock->deleteRecord( recordBlock[i].get_field("zip") );
+          }
+          //add the new record to the block
+          currentBlock->addRecord( record.get_field("zip") );
+          blockCount++;
+          break; //stop searching through linked list of blocks
+        }
+        else{  //if a current empty block doesn't exist, create a new block......
+          Block* newBlockPtr = new Block;
+          newBlockPtr->setRBN(blockCount);
+          newBlockPtr->setNextBlock( currentBlock->getNextBlock() );
+          newBlockPtr->setPrevBlock( (currentBlock->getNextBlock())->getPreviousBlock() );
+          (currentBlock->getNextBlock())->setPrevBlock(newBlockPtr);
+          currentBlock->setNextBlock(newBlockPtr);
+          //split the data into the new block number
+          currentBlock->getRecords( recordBlock ); //get the pkeys
+          for(int i = RECORDSPERBLOCK / 2; i < RECORDSPERBLOCK; i++){
+            (currentBlock->getNextBlock())->addRecord(recordBlock[i].get_field("zip"));
+            currentBlock->deleteRecord( recordBlock[i].get_field("zip") );
+          }
+          //add the new record to the block
+          currentBlock->addRecord( record.get_field("zip") );
+          blockCount++;
+          break; //stop searching through linked list of blocks
+        }
+      }
+      else{
+        currentBlock->addRecord( record.get_field("zip") );
+      }
+			break; //stop searching through linked list of blocks
+		}
+		else{
+			currentBlock = currentBlock->getNextBlock();
+		}
+	}
+
+  //add record to us_postal_codes.txt
+  fstream recordAvailList;
+  string str = "";
+  string strTemp = "";
+  string offset = "";
+  string position = "";
+  recordAvailList.open(recordAvailListFileName);
+  if( recordAvailList.peek() != EOF ){ //if recordAvailList is not empty
+    fstream usPostalCodes;
+    usPostalCodes.open("us_postal_codes.txt");
+    getline(recordAvailList, str); //get the offset and vector position from avail list
+	int i = 0;
+	while( str[i] != '/' ){ //parse the offset from the string
+		offset += str[i];
+		if(DEBUG){cout << offset << endl;}
+		i++;
+	}
+	i++;
+	while( i < str.length()  ){ //parse the position from the string
+		position += str[i];
+		if(DEBUG){cout << position << endl;}
+		i++;
+	}
+    writeToTxt(record, offset, "us_postal_codes.txt");
+    usPostalCodes.close();
+	recordAvailList.close();
+	//update the recordAvailList
+	recordAvailList.open(recordAvailListFileName);
+	str += "\n";
+	if(DEBUG){cout << str << " str to delete" << endl;}
+	while(recordAvailList.peek() != EOF){
+		strTemp += recordAvailList.get();
+		if(DEBUG){cout << strTemp << endl;}
+        if(strTemp == str){
+            strTemp = "";
+        }
+    }
+	recordAvailList.close();
+	remove("availRecordList.txt");
+	ofstream recordAvailListOut;
+	recordAvailListOut.open(recordAvailListFileName, ios::app);
+	if(DEBUG){cout << strTemp << " result" << endl;}
+	recordAvailListOut << strTemp;
+    recordAvailListOut.close();
+	//add record to index vector
+	if(DEBUG){for(int i=0; i<20; ++i)std::cout << pKeyIndex[i] << ' ';}
+	pKeyIndex.insert(pKeyIndex.begin() + stoi( position ), stoi( record.get_field("zip") ) );
+    offsetIndex.insert(offsetIndex.begin() + stoi( position ), stoi( offset ) );
+	cout <<endl;
+	if(DEBUG){for(int i=0; i<20; ++i)std::cout << pKeyIndex[i] << ' ';}
+  }
+  else{ //if recordAvailList is empty
+	unsigned int nextOffset = offsetIndex.back() + 95;//95 is record length+1
+	if(DEBUG){cout << nextOffset << " nextoffset" << endl;}
+	pKeyIndex.push_back( stoi( record.get_field("zip") ) );	
+	offsetIndex.push_back( nextOffset );
+	writeToTxt(record, to_string( nextOffset ), "us_postal_codes.txt");
+	ofstream usPostalCodes;
+    usPostalCodes.open("us_postal_codes.txt", ios::app);
+	usPostalCodes << endl;
+	usPostalCodes.close();
+  }
+  
+  rewriteSSFile();
+}
+
+void SequenceSet::rewriteSSFile()
+{
+	//rewrite the squence set file with missing record
+    remove("Sequence_Set.txt");
+    ofstream SSFile;
+    SSFile.open(SSFileName);
+    SSFile << "Sequence Set File\n";
+    SSFile.close();
+    writeBlocks();
+}
+
+//write the record to the postal codes file
+void SequenceSet::writeToTxt(Record record, string offset, string _fileName)
+{
+	fstream data;
+	data.open(_fileName);
+	data.seekg( stoi( offset ) );
+	   
+	string dataString = "";
+	string totalString = "";
+	
+	dataString = record.get_field("Zip");
+	int fieldLength = 6;
+	for(int i = 0; i < fieldLength - dataString.length(); i++){
+		totalString += " ";
+	}
+	totalString += dataString;
+	
+	dataString = record.get_field("city");
+	fieldLength = 31;
+	totalString += dataString;
+	for(int i = 0; i < fieldLength - dataString.length(); i++){
+		totalString += " ";
+	}
+	
+	dataString = record.get_field("state");
+	totalString += dataString;
+	
+	dataString = record.get_field("county");
+	fieldLength = 38;
+	totalString += dataString;
+	for(int i = 0; i < fieldLength - dataString.length(); i++){
+		totalString += " ";
+	}
+	
+	dataString = record.get_field("long");
+	while(dataString.length() > 7){
+		dataString.pop_back();
+	}
+	fieldLength = 8;
+	for(int i = 0; i < fieldLength - dataString.length(); i++){
+		totalString += " ";
+	}
+	totalString += dataString;
+	
+	dataString = record.get_field("lat");
+	fieldLength = 9;
+	while(dataString.length() > 8){
+		dataString.pop_back();
+	}
+	for(int i = 0; i < fieldLength - dataString.length(); i++){
+		totalString += " ";
+	}
+	totalString += dataString;
+	
+	data << totalString;
+	
+	data.close();
 }

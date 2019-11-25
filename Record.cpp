@@ -3,7 +3,7 @@
  * Class Record (Contains information about individual zipcodes)
  * @author Tyler Lahr, Ryan Sweeney, and Seth Pomahatch
  * (Additional comments by Mark Christenson)
- *---------------------------------------------------------------------------
+ *----------------------------------------------------------------------------
  * Record class:  Used by Sequence Set Class
  *   includes additional features:
  *   -- Display the whole record it represents
@@ -11,7 +11,7 @@
  *   -- Return a field as a string
  *   -- Return the latitude
  *   -- Return the longitude
- *
+ *----------------------------------------------------------------------------
  */
 
 #include "Record.h"
@@ -19,10 +19,6 @@
 #include <stdlib.h>
 using namespace std;
 
-/** Default constructor
- *  @pre None
- *  @post A blank record object is created
- */
 Record::Record()
 {
   zip_code = "";
@@ -33,10 +29,6 @@ Record::Record()
   if(DEBUG) {cout << "Made an empty record.\n";}
 }
 
-/** Constructor with a grid object
- *  @pre Grid object is provided
- *  @post A filled record object is created with a grid object
- */
 Record::Record(string _zip_code, string _place_name, string _state, string _county, Grid _gridPoint)
 {
   zip_code = _zip_code;
@@ -47,10 +39,6 @@ Record::Record(string _zip_code, string _place_name, string _state, string _coun
   if(DEBUG) {cout << "Made a filled record using a gridPoint.\n";}
 }
 
-/** Constructor that also takes latitude, and longitude
- *  @pre String is provided in order of latitude, longitude
- *  @post A filled record object is created with a latitude and longitude
- */
 Record::Record(string _zip_code, string _place_name, string _state, string _county, string latitude, string longitude)
 {
   float lon;
@@ -80,30 +68,22 @@ Record::Record(string _zip_code, string _place_name, string _state, string _coun
   if(DEBUG) {cout << "Made a filled record using string lat/longs.\n";}
 }
 
-/** Displays all fields of the record
- *  @pre None
- *  @post Record object will display all of its own data
- */
 void Record::display()
 {
     if(DEBUG) {cout << "Displaying the whole record from the record.\n";}
     cout << endl
-       << "Zipcode: " << get_field("Zip")
-       << " Place: " << get_field("City")
-       << " State: " << get_field("State")
-       << " County: " << get_field("County")
-       << " Longitude: " << get_field("Longitude")
-       << " Latitude: " << get_field("Latitude")
+       << "Zipcode:\t" << get_field("Zip")
+       << "\nPlace:\t\t" << get_field("City")
+       << "\nState:\t\t" << get_field("State")
+       << "\nCounty:\t\t" << get_field("County")
+       << "\nLongitude:\t" << get_field("Longitude")
+       << "\nLatitude:\t" << get_field("Latitude")
        << endl;
 }
 
-/** Displays the specified field
- *  @pre None
- *  @post Record object will display all of its own data
- */
 void Record::display(string field)
 {
-  if(DEBUG) {cout << "Displaying the "<< field <<" portion of the record.\n";}
+  if(DEBUG) {cout << "Displaying the "<< field <<" portion of the record.\t";}
   for(int i = 0; field[i] != NULL; i++){
       field[i] = toupper(field[i]);
   }
@@ -126,13 +106,9 @@ void Record::display(string field)
     cout << "Invalid field has been entered." << endl;
 }
 
-/** Get the desired field in the record to display a field from its data
- *  @pre Provided string must match the name of a field in the record
- *  @post Record object will display the specified field from its own data
- */
 string Record::get_field(string field)
 {
-  if(DEBUG) {cout << "Retrieving the "<< field <<" portion of the record.\n";}
+  if(DEBUG) {cout << "Retrieving the "<< field <<" portion of the record.\t";}
   string returnString;
   for(int i = 0; field[i] != NULL; i++){
       field[i] = toupper(field[i]);
@@ -158,11 +134,6 @@ string Record::get_field(string field)
   return returnString;
 }
 
-/** 
- *  @pre First provided string must match the name of a field in the record
- *       Second provided string must be the appropriate length for the field
- *  @post Record object will display the specified field from its own data
- */
 void Record::set_field(string field, string data)
 {
   if(DEBUG) {cout << "Setting the "<< field <<" portion of the record from "<< get_field(field) << " to"<< data <<".\n";}
@@ -192,20 +163,12 @@ void Record::set_field(string field, string data)
     cout << "ERROR" << endl;
 }
 
-/** Sets the latitude and longitude
- *  @pre Provide longitude and latitude as floats
- *  @post Set the latitude and longitude of the record
- */
 void Record::set_longitude_latitude(float longitude, float latitude)
 {
   gridPoint.setLatitude( latitude );
   gridPoint.setLongitude( longitude );
 }
 
-/** Sets the Latitude and longitude based on a grid point
- *  @pre A grid point of type Grid
- *  @post Sets latitude and longitude based on grid point recieved
- */
 void Record::set_grid_point(Grid _gridPoint)
 {
   gridPoint.setLatitude( _gridPoint.getLatitude() );
@@ -214,10 +177,6 @@ void Record::set_grid_point(Grid _gridPoint)
 
 //helper functions
 
-/** Turn a string into a float
- *  @pre A string is provided
- *  @post returns the string characters as float
- */
 float Record::string_to_float(string str)
 {
   size_t size;

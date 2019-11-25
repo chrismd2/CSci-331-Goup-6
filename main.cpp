@@ -12,13 +12,323 @@ void truncateTester(); /**<Tests the Truncate Class*/
 void recordTester();
 void blockTester();
 void nullblockTester();
+void SSDeleteAndAddRecordTester();
+int main_menu();
+void addNewRecord();
+void searchForRecord();
+void deleteRecord();
+void quitProgram();
+void extremeCoord();
+
+SequenceSet SSClass;
+bool quit = false;
 
 int main(){
-  //nullblockTester();
-  //recordTester();
+  
+  int choice;
+  cout << "Sequence Set Created." << endl;
+	
+  while( !quit )
+  {
+	cout << endl << endl;
+	
+	choice = main_menu();
 
-  SequenceSet SSClass; SSClass.test();
+	switch( choice )
+	{
+		case 1: addNewRecord();
+				break;
+		case 2: searchForRecord();
+				break;
+		case 3: deleteRecord();
+				break;
+		case 4: quitProgram();
+				break;
+		case 5: extremeCoord();
+				break;
+		default: cout << "Selecting menu option canceled." << endl;
+	}
+  }
+  
   return 0;
+}
+
+void extremeCoord()
+{
+  string state, dir;
+  char direction;
+  cout << "Please enter the state you wish to search in its two letter code with CAPS.\n\t";
+  cin >> state;
+  cout  << "Please enter the direction you wish to find the extreme with a "
+        <<"character by choosing n, s, e, or w.\n\t";
+  cin >> direction;
+  switch(direction){
+  case 'n':
+    dir = "nothern";
+    break;
+  case 'e':
+    dir = "eastern";
+    break;
+  case 's':
+    dir = "southern";
+    break;
+  case 'w':
+    dir = "western";
+    break;
+  default:
+    dir = "ERROR";
+  }
+  cout  << "The details of the "<< dir <<" most zipcode\n\t" 
+        << SSClass.fetch(SSClass.extremeCoord(state, direction));
+}
+
+void quitProgram()
+{
+	quit = true;
+}
+
+void deleteRecord()
+{
+	string field;
+	
+	//ask user for pKey
+	while(true)
+	{
+		cout << "Please enter the Zip Code of the Record to delete:" << endl;
+		cin  >> field;
+		if(field.length() > 6 || field.length() < 1)
+		{
+			cout << "Invalid Zip Code entered. Please try again." << endl;
+		}
+		else
+		{
+			break;
+		}
+	}
+	
+	cout << endl << "Searching for Record" << endl;
+	int position = SSClass.binarySearchSS(field);
+	if(position != -1)
+	{
+		cout << "Deleting Record from Sequence Set." << endl;
+		if ( SSClass.deleteRecord( stoi( field ) ) )
+		{
+			cout << "Record deleted Successfully." << endl;
+		}
+		else
+		{
+			cout << "Error Deleting Record." << endl;
+		}
+	}
+	else
+	{
+		cout << "Record not found in Sequence Set" << endl;
+	}
+}
+
+void searchForRecord()
+{
+	string field;
+	
+	//ask user for pKey
+	while(true)
+	{
+		cout << "Please enter the Zip Code of the Record to find:" << endl;
+		cin  >> field;
+		if(field.length() > 6 || field.length() < 1)
+		{
+			cout << "Invalid Zip Code entered. Please try again." << endl;
+		}
+		else
+		{
+			break;
+		}
+	}
+	
+	cout << endl << "Searching for Record" << endl;
+	int position = SSClass.binarySearchSS(field);
+	if(position != -1)
+	{
+		cout << "Record found in Sequence Set." << endl;
+		cout << "Displaying Record:" << endl << endl;
+		cout << SSClass.fetch(field) << endl;
+	}
+	else
+	{
+		cout << "Record not found in Sequence Set" << endl;
+	}
+	
+}
+
+void addNewRecord()
+{
+	string field;
+	Record record;
+	
+	//ask user for zip code
+	while(true)
+	{
+		cout << "Please enter the Zip Code of the Record:" << endl;
+		cin  >> field;
+		if(field.length() > 6 || field.length() < 1)
+		{
+			cout << "Invalid Zip Code entered. Please try again." << endl;
+		}
+		else
+		{
+			record.set_field("zip", field);
+			break;
+		}
+	}
+	
+	//ask user for city
+	while(true)
+	{
+		cout << "Please enter the City of the Record: (use underscore _ as space)" << endl;
+		cin  >> field;
+		if(field.length() > 31 || field.length() < 1)
+		{
+			cout << "Invalid City entered. Please try again." << endl;
+		}
+		else
+		{
+			for(int i = 0; i < field.length(); i++)
+			{
+				if(field[i] == '_')
+					field[i] = ' ';
+			}
+			record.set_field("city", field);
+			break;
+		}
+	}
+	
+	//ask user for state
+	while(true)
+	{
+		cout << "Please enter the State of the Record (two character format: MN):" << endl;
+		cin  >> field;
+		if( field.length() != 2 )
+		{
+			cout << "Invalid State entered. Please try again." << endl;
+		}
+		else
+		{
+			record.set_field("state", field);
+			break;
+		}
+	}
+	
+	//ask user for county
+	while(true)
+	{
+		cout << "Please enter the County of the Record:" << endl;
+		cin  >> field;
+		if(field.length() > 38 || field.length() < 1)
+		{
+			cout << "Invalid County entered. Please try again." << endl;
+		}
+		else
+		{
+			record.set_field("county", field);
+			break;
+		}
+	}
+	
+	//ask user for longitude
+	while(true)
+	{
+		cout << "Please enter the Longitude of the Record:" << endl;
+		cin  >> field;
+		if(field.length() > 8 || field.length() < 1)
+		{
+			cout << "Invalid Longitude entered. Please try again." << endl;
+		}
+		else
+		{
+			record.set_field("long", field);
+			break;
+		}
+	}
+	
+	//ask user for latitude
+	while(true)
+	{
+		cout << "Please enter the Latitude of the Record:" << endl;
+		cin  >> field;
+		if(field.length() > 9 || field.length() < 1)
+		{
+			cout << "Invalid Latitude entered. Please try again." << endl;
+		}
+		else
+		{
+			record.set_field("lat", field);
+			break;
+		}
+	}
+	
+	cout << endl << "New Record Created." << endl;
+	SSClass.addRecord( record );
+	cout << "New Record added to Sequence Set." << endl;
+}
+
+int main_menu()
+{
+  int userResponce;
+  while(true)
+  {
+	  cout << "Please select an option:" << endl;
+	  cout << "1. Add a new Record" << endl;
+	  cout << "2. Search for and Display a Record" << endl;
+	  cout << "3. Delete a Record" << endl;
+	  cout << "4. Quit Program" << endl;
+	  cout << "5. Find the X-treme coordinate of a state" << endl;
+	  cin  >> userResponce;
+	  
+	  if(userResponce < 1 || userResponce > 5)
+		  cout << "Please enter a valid option" << endl;
+	  else
+		return userResponce;
+  }
+}
+
+void SSDeleteAndAddRecordTester()
+{
+  SequenceSet SSClass;
+  
+  SSClass.deleteRecord(1008);
+  SSClass.deleteRecord(1003);
+  SSClass.deleteRecord(1004);
+  
+  string zip = "563";
+  string place = "Little Falls";
+  string state = "MN";
+  string county = "Morrison";
+  string longitude = "-74.25";
+  string latitude = "79.72";
+  Record testRecord(zip, place, state, county, longitude, latitude);
+  SSClass.addRecord(testRecord);
+  
+  zip = "1024";
+  Record testRecord2(zip, place, state, county, longitude, latitude);
+  SSClass.addRecord(testRecord2);
+  
+  zip = "1025";
+  Record testRecord3(zip, place, state, county, longitude, latitude);
+  SSClass.addRecord(testRecord3);
+  
+  zip = "1051";
+  Record testRecord4(zip, place, state, county, longitude, latitude);
+  SSClass.addRecord(testRecord4);
+  
+  zip = "1052";
+  Record testRecord5(zip, place, state, county, longitude, latitude);
+  SSClass.addRecord(testRecord5);
+  
+  zip = "300";
+  Record testRecord6(zip, place, state, county, longitude, latitude);
+  SSClass.addRecord(testRecord6);
+  
+  SSClass.rewriteSSFile();
 }
 
 void nullblockTester(){
@@ -125,7 +435,7 @@ void recordTester(){
   cout << endl;
 
   //test constructor 2
-  float longitude_float = -74.25;
+  float longitude_float = 74.25;
   float latitude_float = 79.72;
 
   Record testRecord2(zip, place, state, county, longitude, latitude);
