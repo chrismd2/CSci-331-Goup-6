@@ -771,16 +771,23 @@ void SequenceSet::addRecord(Record record)
     recordAvailListOut.close();
 	//add record to index vector
 	if(DEBUG){for(int i=0; i<20; ++i)std::cout << pKeyIndex[i] << ' ';}
-	pKeyIndex.insert(pKeyIndex.begin() + stoi( position ), stoi( record.get_field("zip") ) );
-    offsetIndex.insert(offsetIndex.begin() + stoi( position ), stoi( offset ) );
-	cout <<endl;
+	pKeyIndex.push_back(stoi( record.get_field("zip") ) );
+	sort(pKeyIndex.begin(), pKeyIndex.end() );
+	int position = binarySearchSS( record.get_field("zip") );
+    offsetIndex.insert(offsetIndex.begin() + position, stoi( offset ) );
+	if(DEBUG){cout <<endl;}
 	if(DEBUG){for(int i=0; i<20; ++i)std::cout << pKeyIndex[i] << ' ';}
   }
   else{ //if recordAvailList is empty
 	unsigned int nextOffset = offsetIndex.back() + 95;//95 is record length+1
 	if(DEBUG){cout << nextOffset << " nextoffset" << endl;}
-	pKeyIndex.push_back( stoi( record.get_field("zip") ) );	
-	offsetIndex.push_back( nextOffset );
+	if(DEBUG){for(int i=0; i<20; ++i)std::cout << pKeyIndex[i] << ' ';}
+	pKeyIndex.push_back(stoi( record.get_field("zip") ) );
+	sort(pKeyIndex.begin(), pKeyIndex.end() );
+	int position = binarySearchSS( record.get_field("zip") ); 
+    offsetIndex.insert(offsetIndex.begin() + position, nextOffset );
+	if(DEBUG){cout <<endl;}
+	if(DEBUG){for(int i=0; i<20; ++i)std::cout << pKeyIndex[i] << ' ';}
 	writeToTxt(record, to_string( nextOffset ), "us_postal_codes.txt");
 	ofstream usPostalCodes;
     usPostalCodes.open("us_postal_codes.txt", ios::app);
