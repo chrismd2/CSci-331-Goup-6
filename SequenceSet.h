@@ -156,8 +156,8 @@ public:
     int binarySearchSS(string x);
     
     /**
-    * @pre
-    * @post
+    * @pre None
+    * @post Returns the various tester results
     */
     int test();
 };
