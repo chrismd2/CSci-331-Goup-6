@@ -17,16 +17,7 @@
 #include <iostream>
 #include <math.h>
 using namespace std;
-	
-/** Grid class
- *  
- *  Variables for latitude and longitude, constructor for setting
- *  0 to both latitude and longitude (default constructor) and a
- *	constructor for setting latitude and longitude to input values.
- *
- *  Methods for setting and getting latitude and longitude and for
- *  getting the distance between two points.
- */
+
 class Grid {
   private:
 		float latitude; /**< Variable for latitude */
