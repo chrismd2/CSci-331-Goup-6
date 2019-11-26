@@ -35,55 +35,69 @@ class Block
  		 *  @post A blank Block object is created
  		 */
   	Block();
+
 		/** Relative Block Number constructor
  		 *  @pre None
  		 *  @post A blank Block object is created
  		 */
     Block(unsigned long long _RBN);
+
 		/** Constructor with record numbers
  		 *  @pre The passed array must be of size fill count
  		 *  @post A block object is made using an array of primary keys
  		 */
 		Block(string[]);
+
 		/** Constructor with record numbers
  		 *  @pre A string
  		 *  @post A Block object is created using the string
  		 */
   	Block(string);
+		
 		/**
  		 * @pre A block
  		 * @post Writes the block to a file
  		 */
  		void write(string);
+
 		/** Searches for record
  		 * @pre Primary key
  		 * @post Returns the record or 0 if the record is not found
  		 */
-   	int search(string pKey); /**< Searches for primary key */
+   	int search(string pKey);
+
    	Block * getNextBlock(); /**< Gets pointer of next block */
    	Block * getPreviousBlock(); /**< Gets pointer of previous block */
    	void setNextBlock( Block * nextBlockPtr ); /**< Sets pointer to next block */
    	void setPrevBlock( Block * previousBlockPtr ); /**< Sets pointer to previous block */
     int getRecordCount(); /**< Gets the record count */
     int getLastRecordPKey(); /**< Gets the last record of the block */
+
 		/**
 		 * @pre Primary key
 		 * @post Deletes the record with the given primary key
 		 */
    	bool deleteRecord(string pKey);
+		 
 		/**
 		 * @pre Primary key
 		 * @post Adds the record with the given primary key
 		 */
    	bool addRecord(string pKey);
+		 
 		/**
-		 * @pre Block
-		 * @post Returns records in a block
+		 * @pre Record object array
+		 * @post Fills record block
 		 */
-   	void getRecords(Record block[]); /**< Gets zip codes for the sequence set */
-		string blockData(); /**< Returns RBN and records of the block*/
+   	void getRecords(Record block[]);
 
-    unsigned long long getRBN();
+		string blockData(); /**< Returns RBN and records of the block*/
+		unsigned long long getRBN();	/**< Gets the relative block number*/
+
+		/** Set rleative block number
+		 * @pre unsigned long long int 
+		 * @post Sets the relative block number
+		 */
     void setRBN(unsigned long long);
   private:
    	void sortRecord(); /**< Sorts the record */

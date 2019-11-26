@@ -19,6 +19,7 @@ void searchForRecord();
 void deleteRecord();
 void quitProgram();
 void extremeCoord();
+void test();
 
 SequenceSet SSClass;
 bool quit = false;
@@ -30,27 +31,36 @@ int main(){
 	
   while( !quit )
   {
-	cout << endl << endl;
-	
-	choice = main_menu();
+    cout << endl << endl;
+    
+    choice = main_menu();
 
-	switch( choice )
-	{
-		case 1: addNewRecord();
-				break;
-		case 2: searchForRecord();
-				break;
-		case 3: deleteRecord();
-				break;
-		case 4: quitProgram();
-				break;
-		case 5: extremeCoord();
-				break;
-		default: cout << "Selecting menu option canceled." << endl;
-	}
+    switch( choice )
+    {
+      case 1: addNewRecord();
+          break;
+      case 2: searchForRecord();
+          break;
+      case 3: deleteRecord();
+          break;
+      case 4: quitProgram();
+          break;
+      case 5: extremeCoord();
+          break;
+      case 6: test();
+          break;
+      default: cout << "Selecting menu option canceled." << endl;
+    }
   }
   
   return 0;
+}
+
+void test(){
+  recordTester();
+  blockTester();
+  nullblockTester();
+  SSDeleteAndAddRecordTester();
 }
 
 void extremeCoord()
@@ -282,9 +292,10 @@ int main_menu()
 	  cout << "3. Delete a Record" << endl;
 	  cout << "4. Quit Program" << endl;
 	  cout << "5. Find the X-treme coordinate of a state" << endl;
+	  cout << "6. Testing" << endl;
 	  cin  >> userResponce;
 	  
-	  if(userResponce < 1 || userResponce > 5)
+	  if(userResponce < 1 || userResponce > 6)
 		  cout << "Please enter a valid option" << endl;
 	  else
 		return userResponce;

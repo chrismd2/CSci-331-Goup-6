@@ -1,14 +1,19 @@
 /**-------------------------------------------------------------------------------------------------
- * @SequenceSet.h
+ * @SequenceSet.cpp
  * Class Sequence set
- * @author Tyler Lahr, Seth Pomahatch, Sushan Tiwari, Ryan Sweeney,  
- * (Additional comments by Mark Christenson)
- *-------------------------------------------------------------------------------------------------
+ * @author Tyler Lahr, Seth Pomahatch, Sushan Tiwari, Ryan Sweeney, Mark Christenson
+ *--------------------------------------------------------------------------------------------------
  * Block class:  Used by Sequence Set Class
  *   includes additional features:
  *   --Make record offsets
- *   --
- -------------------------------------------------------------------------------------------------
+ *   --Fill Index
+ *   --fillRecordBlock
+ *   --extremeCoord
+ *   --deleteRecord
+ *   --addRecord
+ *   --rewriteSSClass
+ *   --writeToTxt
+ ---------------------------------------------------------------------------------------------------
  */
  
 #include "SequenceSet.h"
@@ -56,7 +61,7 @@ SequenceSet::SequenceSet(){
   recordAvailList << "";
   recordAvailList.close();
   sKeyStateBuilder();
-}
+}// End default constructor
 
 unsigned long long SequenceSet::headerLength(string _fileName){
   fstream data;
@@ -80,7 +85,7 @@ unsigned long long SequenceSet::headerLength(string _fileName){
   data.close();
 
   return L;
-}
+}// End headerLength
 
 unsigned int SequenceSet::getRecordCount(){
     string fileName = DATAFILENAME;
@@ -114,7 +119,7 @@ unsigned int SequenceSet::getRecordCount(){
     data.close();
 
     return recordCount;
-}
+}// End getRecordCount
 
 void SequenceSet::fillIndex(){
     string field;
@@ -146,7 +151,7 @@ void SequenceSet::fillIndex(){
         if(DEBUG){cout << "offsetIndex.at("<<i<<"): " << offsetIndex.at(i) <<endl;}
     }
     data.close();
-}
+}// End fillIndex
 
 string SequenceSet::fetch(string pKey){
   fstream data;
@@ -171,11 +176,11 @@ string SequenceSet::fetch(string pKey){
   data.close();
 
   return returnString;
-}
+}// End fetch with string
 
 string SequenceSet::fetch(unsigned int pKey){
   return fetch(to_string(pKey));
-}
+}// End fetch with int
 
 void SequenceSet::makeRecordOffsets(string fileName){
     string zip = "      ";
@@ -204,12 +209,9 @@ void SequenceSet::makeRecordOffsets(string fileName){
 
     data.close();
     index.close();
-}
+}//End makeRecordOffsets
 
-/** Searches block for record by primary key
- * @pre Primary key
- * @post Returns true if found otherwise returns false
- */
+
 int SequenceSet::binarySearchSS(string x)
 {
 	//int int_arr[n];
@@ -257,7 +259,7 @@ int SequenceSet::binarySearchSS(string x)
 	catch(...){cout << "ERROR (stoi)ING THIS STRING: \"" << x << "\"\n";}
 
     return -1;
-}
+}// End binarySearchSS
 
 Record SequenceSet::fillRecord(string RecordString){
   string zip_code, place_name, state, county, latitude, longitude;
@@ -321,7 +323,7 @@ Record SequenceSet::fillRecord(string RecordString){
   if(DEBUG){returnRecord.display();}
 
   return returnRecord;  
-}
+}// End fillRecord
 
 void SequenceSet::writeBlocks(){
   Block * currentBlock = headBlock;
@@ -330,7 +332,7 @@ void SequenceSet::writeBlocks(){
     currentBlock->write(SSFileName);
     currentBlock = currentBlock->getNextBlock();
   }
-}
+}// End writeBlocks
 
 void SequenceSet::fillRecordBlock(unsigned long long blockID){
   string str, zip, passed;
@@ -351,7 +353,7 @@ void SequenceSet::fillRecordBlock(unsigned long long blockID){
       if(DEBUG){recordBlock[i].display();}
     }
   }
-}
+}// End fillRecordBlock
 
 void SequenceSet::addBlockStateKey(unsigned long long blockID){
   fillRecordBlock(blockID);
@@ -409,7 +411,7 @@ void SequenceSet::addBlockStateKey(unsigned long long blockID){
       }
     }
   }
-}
+}// End addBlockStateKey
 
 
 bool SequenceSet::deleteRecord(int pKey)
@@ -515,7 +517,7 @@ bool SequenceSet::deleteRecord(int pKey)
 	rewriteSSFile();
     return true;
   }
-}
+}// End deleteRecord
 
 string SequenceSet::extremeCoord(string state, char direction)
 {
@@ -610,7 +612,7 @@ string SequenceSet::extremeCoord(string state, char direction)
     }
 	}
 	return zip;
-}
+}// End extremeCoord
 
 int SequenceSet::test(){
     string field;
@@ -659,7 +661,7 @@ int SequenceSet::test(){
     cout << extremeCoord(str, 'n') << endl;
 
     return 0;
-}
+}// End test
 
 
 void SequenceSet::sKeyStateBuilder(){
@@ -671,7 +673,7 @@ void SequenceSet::sKeyStateBuilder(){
       currentBlock = currentBlock->getNextBlock();
       index++;
     }
-}
+}//End sKeyStateBuilder
 
 void SequenceSet::addRecord(Record record)
 {
@@ -793,7 +795,7 @@ void SequenceSet::addRecord(Record record)
   }
   
   rewriteSSFile();
-}
+}// End addRecord
 
 void SequenceSet::rewriteSSFile()
 {
@@ -804,7 +806,7 @@ void SequenceSet::rewriteSSFile()
     SSFile << "Sequence Set File\n";
     SSFile.close();
     writeBlocks();
-}
+}//End rewriteSSFile
 
 //write the record to the postal codes file
 void SequenceSet::writeToTxt(Record record, string offset, string _fileName)
@@ -863,4 +865,4 @@ void SequenceSet::writeToTxt(Record record, string offset, string _fileName)
 	data << totalString;
 	
 	data.close();
-}
+}// End writeToTxt

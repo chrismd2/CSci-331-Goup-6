@@ -7,7 +7,7 @@
  * Record class:  Used by Sequence Set Class
  *   includes additional features:
  *   -- Display the whole record it represents
- *   -- Display a field with in the record
+ *   -- Display a field within the record
  *   -- Return a field as a string
  *   -- Return the latitude
  *   -- Return the longitude

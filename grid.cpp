@@ -11,12 +11,12 @@
  *   -- Return distance to a provided grid from this grid
  *---------------------------------------------------------------------------
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
 #include <math.h>
 using namespace std;
-//const bool DEBUG = true;
 	
 /** Grid class
  *  

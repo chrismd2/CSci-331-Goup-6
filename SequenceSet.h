@@ -1,13 +1,18 @@
 /**-------------------------------------------------------------------------------------------------
  * @SequenceSet.h
  * Class Sequence set
- * @author Tyler Lahr, Seth Pomahatch, Sushan Tiwari, Ryan Sweeney 
- * (Additional comments by Mark Christenson)
+ * @author Tyler Lahr, Seth Pomahatch, Sushan Tiwari, Ryan Sweeney, Mark Christenson
  *--------------------------------------------------------------------------------------------------
  * Block class:  Used by Sequence Set Class
  *   includes additional features:
  *   --Make record offsets
- *   --
+ *   --Fill Index
+ *   --fillRecordBlock
+ *   --extremeCoord
+ *   --deleteRecord
+ *   --addRecord
+ *   --rewriteSSClass
+ *   --writeToTxt
  ---------------------------------------------------------------------------------------------------
  */
 
@@ -29,20 +34,41 @@ class SequenceSet
 private:
     string SSFileName = "Sequence_Set.txt";	/**< Variable for Sequence_set.txt*/
     string recordAvailListFileName = "availRecordList.txt";	/**< Variable for availRecordList.txt*/
-    unsigned long long headerLength(string);	/**< */
-    unsigned long long blockCount;	/**< */
-    unsigned int recordCount;	/**< */
+    unsigned long long headerLength(string);	/**< Gets length of header*/
+    unsigned long long blockCount;	/**< Holds number of blocks*/
+    unsigned int recordCount;	/**< Holds number of records */
     //unsigned int indexArray[getRecordCount()][2];
-    vector<unsigned int>pKeyIndex;
-    vector<unsigned int>offsetIndex;
-    vector<vector<string>>stateZips;    
-    vector<vector<string>>sKeyCounty;
-    vector<vector<string>>sKeyPlace;
-    vector<Block*>blockAvailList;
+    vector<unsigned int>pKeyIndex;	/**< Primary key zipcode to be used with offsetIndex*/
+    vector<unsigned int>offsetIndex;	/**< Find a pKey position in pKeyIndex go to that 
+                                         * position here to retrieve the offet for that 
+                                         * record
+																				 */
+    vector<vector<string>>stateZips;    /**< States zipcodes*/
+    vector<vector<string>>sKeyCounty;	/**< Secondary key for county*/
+    vector<vector<string>>sKeyPlace;	/**< Secondary key for place (city)*/
+    vector<Block*>blockAvailList;	/**< Stack of empty blocks*/
     Record recordBlock[RECORDSPERBLOCK];  /**< This is where the block is loaded into memory*/
-    Block * headBlock = new Block;
+    Block * headBlock = new Block;	/**< Start of the block list*/
+
+    /**Add block state key
+		 *	@pre		Block ID is less than block count(ie the block is in the block chain)
+		 *	@post		A block in the chain is added to the state keys
+		 */
+    void addBlockStateKey(unsigned long long blockID);
+
+    /**Add block state key builder
+		 *	@pre		None
+		 *	@post		Builds the secondary index for states
+		 */
+    void sKeyStateBuilder();
+    
 
 public:
+		/** Default constructor
+		* @pre File with a name that matches DATAFILENAME in Header.cpp must exist
+    *      and it must contain a line equal to HEADERENDSTRING in Header.cpp
+		* @post Sequence Set Class is made
+		*/
     SequenceSet();
 
     /**  Make record offsets
@@ -97,35 +123,43 @@ public:
     */
     string fetch(unsigned int pKey);
 
-    /**Add block state key
-		 *	@pre		Block ID is less than block count
-		 *	@post		******************************************************add post
-		 */
-    void addBlockStateKey(unsigned long long blockID);
+    /** Extreme coordinate
+    *	@pre	State of type string and Direction of type Char (N, E, S, W)
+    *       State code must be in the list of states or the last state in list is used
+    *	@post Returns the zipcode containing the most extreme point of said direction
+    */
+    string extremeCoord(string, char);
 
-    /**Add block state key builder
-		 *	@pre		None
-		 *	@post		Builds the secondary index for states
+		/** Delete record
+		 * @pre A primary key (zipcode)
+		 * @post Deletes record with given zipcode
 		 */
-    void sKeyStateBuilder();
-
-		/** Extreme coordinate
-		 *	@pre	State of type string and Direction (N, E, S, W)
-		 *	@post Returns the zipcode containing the most extreme point of said direction
+    bool deleteRecord(int pKey);
+		
+		/** Add record
+		 * @pre A record object
+		 * @post Adds the record
 		 */
-		string extremeCoord(string, char);
+    void addRecord(Record record);
+    void rewriteSSFile();/**< */
 
-    /**  Test 1
-    *    Preconditions:     This is not a permanent function
-    *    Postconditions:    See precondition
+		/** WriteToTxt
+		 * @pre Inputs should match source length requirements
+		 * @post Writes the record to the data file (us_postal_codes.txt)
+		 */
+    void writeToTxt(Record, string, string);
+
+		/** Searches block for record by primary key
+		* @pre Primary key
+		* @post Returns true if found otherwise returns false
+		*/
+    int binarySearchSS(string x);
+    
+    /**
+    * @pre
+    * @post
     */
     int test();
-
-    bool deleteRecord(int pKey);
-    void addRecord(Record record);
-	void rewriteSSFile();
-	void writeToTxt(Record, string, string);
-	int binarySearchSS(string x);
 };
 
 #include "SequenceSet.cpp"

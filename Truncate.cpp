@@ -8,7 +8,7 @@
 #include "Header.cpp"
 
 Truncate::Truncate(){
-    if (true)
+    if (DEBUG)
     {
         cout << "Truncate object made";
     }
