@@ -62,7 +62,7 @@ class Block
 
 		/** Searches for record
  		 * @pre Primary key
- 		 * @post Returns the record or 0 if the record is not found
+ 		 * @post Returns the record or -1 if the record is not found
  		 */
    	int search(string pKey);
 
@@ -99,6 +99,7 @@ class Block
 		 * @post Sets the relative block number
 		 */
     void setRBN(unsigned long long);
+    
   private:
    	void sortRecord(); /**< Sorts the record */
  		bool isEmpty;  /**< Bool for empty*/

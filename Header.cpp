@@ -7,3 +7,4 @@ extern const double FILLPERCENT   	= 75;						/**< Max length of the RBN code in
 extern const int BLOCKFILLCOUNT		= RECORDSPERBLOCK * (FILLPERCENT/100);		/**< Max length of the RBN code in digits */
 extern const string HEADERENDSTRING = "1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890";  /**<String at the end of the header*/
 extern const string DATAFILENAME    = "us_postal_codes.txt";    /**< Data file name*/
+extern const int ORDER    = 6;    /**< Data file name*/

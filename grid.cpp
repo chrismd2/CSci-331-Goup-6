@@ -17,7 +17,7 @@
 #include <iostream>
 #include <math.h>
 using namespace std;
-
+	
 class Grid {
   private:
 		float latitude; /**< Variable for latitude */

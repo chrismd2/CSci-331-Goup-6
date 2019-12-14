@@ -20,6 +20,7 @@ void deleteRecord();
 void quitProgram();
 void extremeCoord();
 void test();
+void treeSearch();
 
 SequenceSet SSClass;
 bool quit = false;
@@ -49,6 +50,8 @@ int main(){
           break;
       case 6: test();
           break;
+      case 7: treeSearch();
+          break;
       default: cout << "Selecting menu option canceled." << endl;
     }
   }
@@ -61,6 +64,12 @@ void test(){
   blockTester();
   nullblockTester();
   SSDeleteAndAddRecordTester();
+}
+
+void treeSearch(){
+  string pKey;
+  cin >> pKey;
+  SSClass.TreeSearch(pKey);
 }
 
 void extremeCoord()
@@ -295,7 +304,7 @@ int main_menu()
 	  cout << "6. Testing" << endl;
 	  cin  >> userResponce;
 	  
-	  if(userResponce < 1 || userResponce > 6)
+	  if(userResponce < 1 || userResponce > 7)
 		  cout << "Please enter a valid option" << endl;
 	  else
 		return userResponce;

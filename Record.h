@@ -1,5 +1,5 @@
 /**---------------------------------------------------------------------------
- * @Record.cpp
+ * @Record.h
  * Class Record (Contains information about individual zipcodes)
  * @author Tyler Lahr, Ryan Sweeney, and Seth Pomahatch
  * (Additional comments by Mark Christenson)

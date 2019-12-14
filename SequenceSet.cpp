@@ -1,4 +1,4 @@
-/**-------------------------------------------------------------------------------------------------
+ /**-------------------------------------------------------------------------------------------------
  * @SequenceSet.cpp
  * Class Sequence set
  * @author Tyler Lahr, Seth Pomahatch, Sushan Tiwari, Ryan Sweeney, Mark Christenson
@@ -26,6 +26,8 @@
 #include <fstream>
 #include <vector>
 #include <stdio.h>
+
+#include <time.h>
 
 using namespace std;
 
@@ -61,7 +63,60 @@ SequenceSet::SequenceSet(){
   recordAvailList << "";
   recordAvailList.close();
   sKeyStateBuilder();
+
+  /*
+  ///New Material for B+Tree
+  bool testing = true;
+  if(testing){cout << "Calling treeBuilder()\n";}
+  treeBuilder();
+  tree.test();
+  */
+
+  cout << "finished constructor\n";
 }// End default constructor
+
+/*
+///New functions for B+Tree 
+void SequenceSet::treeBuilder(){
+  bool testing = true;
+  Block * currentBlock = headBlock;
+  if(testing){cout << "currentBlock set to headBlock\n";}
+  unsigned int index = 0;
+
+  while(currentBlock != NULL && (!testing ^ index < 5)){
+    if(testing){cout << "inserting RBN " << currentBlock->getRBN() << " to the tree\n";}
+    tree.insert(currentBlock);
+    if(testing){cout << "Retrieving the next block\n";}
+    currentBlock = currentBlock->getNextBlock();
+    if(testing){index++;}
+  }
+  if(currentBlock == NULL){cout << "TreeBuilder exit\n";}
+}
+
+//Returns true if Block A < Block B
+bool SequenceSet::isLessThan(Block* A, Block* B){
+  return ( A -> getLastRecordPKey() < B -> getLastRecordPKey() );
+}
+
+//Returns true if Block A > Block B
+bool SequenceSet::isGreaterThan(Block* A, Block* B){
+  return ( A -> getLastRecordPKey() > B -> getLastRecordPKey() );
+}
+
+Block * SequenceSet::TreeSearch(string pKey){
+  bool done = false;
+  bool found = false;
+  unsigned int index = 1;
+  Block * currentBlock;
+
+  cout << "Stopped at Block " << currentBlock->getRBN() << ": " << currentBlock->blockData() << endl;
+
+  return currentBlock;
+}
+
+///End of new functions for B+Tree 
+*/
+
 
 unsigned long long SequenceSet::headerLength(string _fileName){
   fstream data;
@@ -210,7 +265,6 @@ void SequenceSet::makeRecordOffsets(string fileName){
     data.close();
     index.close();
 }//End makeRecordOffsets
-
 
 int SequenceSet::binarySearchSS(string x)
 {
@@ -403,7 +457,7 @@ void SequenceSet::addBlockStateKey(unsigned long long blockID){
 
 	if(DEBUG){cout << "Pushing " << recordBlock[i].get_field("zip") <<" to "<< index <<" column.\n";}
 	stateZips[index].push_back(recordBlock[i].get_field("zip"));
-	//if(DEBUG){cout << stateZips[index].at(stateZips[index].size())<<" pushed successfully.\n";}
+	//if(DEBUG){cout << stateZips[index].at(stateZips[index].size() - 1)<<" pushed successfully.\n";}
 
 
 	if(DEBUG){cout	<< stateZips[index].at(0) << ": " 
@@ -644,7 +698,7 @@ int SequenceSet::test(){
       else{index++;}
     }
 
-    while(record < stateZips[index].size()){
+    while(record < stateZips[index].size() - 1){
       str = fetch(stateZips[index][record]);
       cout << str << endl;
       currentRecord = fillRecord(str);
